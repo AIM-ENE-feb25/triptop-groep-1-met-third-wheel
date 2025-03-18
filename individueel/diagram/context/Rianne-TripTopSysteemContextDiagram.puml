@@ -1,0 +1,22 @@
+@startuml
+!include https://raw.githubusercontent.com/kirchsth/C4-PlantUML/extended/C4_Container.puml
+
+AddRelTag("sync", $textColor="black", $lineColor="black", $lineStyle = DashedLine())
+
+LAYOUT_WITH_LEGEND()
+
+title TripTop - Context Diagram
+
+Person(User, "Traveler", "[person] \n Wants to plan a trip and book this trip")
+System_Ext(paymentGateway, "Payment Gateway", "Processes payment for blocks via iDeal or creditcard.")
+System_Ext(externalTravelSystem, "Travel System", "[external system] \n Gives routes through google maps or ferry API")
+System_Ext(externalBookingSystem, "Booking System", [external system] \n Gives data about bookings for hotels or activities such as Booking and TripAdivsor)
+System(TripTop, "Triptop", [system] \n Has overview of bookings and  travelling routes)
+
+
+Rel_D(User, TripTop, "Places blocks \n and pays these", $tags="sync")
+Rel_D(TripTop, paymentGateway, "Gives payment options", $tags="sync")
+Rel_D(TripTop, externalTravelSystem, "Sends location details", $tags="sync")
+Rel_D(TripTop, externalBookingSystem, "Sends booking details", $tags="sync")
+
+@enduml
