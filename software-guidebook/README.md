@@ -9,14 +9,12 @@ Dit software guidebook geeft een overzicht van de Triptop-applicatie. Het bevat 
 
 ## 2. Context
 
-> [!IMPORTANT]
-> Werk zelf dit hoofdstuk uit met context diagrammen en een beschrijving van de context van de software.
+Het context diagram ziet er als volgt uit:
+![Context diagram](../opdracht-diagrammen/Context%20diagram.png)
 
-Toelichting op de context van de software inclusief System Context Diagram:
-* Functionaliteit
-* Gebruikers
-* Externe systemen
-
+De gebruiker is een reiziger die een reis wil plannen en boeken. Met de Triptop applicatie kan de reiziger dit doen.
+Triptop gebruikt externe API's om informatie over de bouwstenen op te halen.
+De Identity Provider zorgt voor authenticatie en autorisatie van de gebruiker op de website.
 ## 3. Functional Overview
 
 Om de belangrijkste features toe te lichten zijn er user stories en twee domain stories gemaakt en een overzicht van het domein in de vorm van een domeinmodel. Op deze plek staat typisch een user story map maar die ontbreekt in dit voorbeeld.
@@ -78,10 +76,26 @@ Voordat deze casusomschrijving tot stand kwam, heeft de opdrachtgever de volgend
 ## 7. Software Architecture
 
 ###     7.1. Containers
+Het statische container diagram staat hieronder.
+![Statisch container diagram](../opdracht-diagrammen/Static%20container%20diagram.png)
+De reiziger bezoekt de website, deze communiceert met de Identity Provider bij het inloggen.
+Als de reiziger al ingelogd is en andere acties doet, controleert de backend dat de token klopt.
+De backend vraagt informatie op van de externe API's en geeft deze terug naar de webapplicatie.
+De database slaat de planning van een reis op. 
 
-> [!IMPORTANT]
-> Voeg toe: Container Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
+In de volgende stukken worden de dynamische container diagrammen weergegeven voor bij het inloggen en het boeken van een reis.
 
+#### 7.1.1 Inloggen
+![Dynamisch diagram inloggen](../opdracht-diagrammen/Dynamisch%20container%20diagram%20inloggen.png)
+
+De reiziger logt in op de website met de inloggegevens. De webapplciatie stuurt die door naar de Identity Provider en deze geeft een token terug.
+
+#### 7.1.2 Reis boeken
+![Dynamisch diagram reis boeken](../opdracht-diagrammen/Dynamisch%20container%20diagram%20reis%20boeken.png)  
+De reiziger voegt op de website een bouwsteen toe. Deze bevat informatie van een externe API.
+De web applicatie stuurt een API-request door naar de backend met deze bouwsteen en de token van de reiziger.
+De backend stuurt de token op naar de Identity Provider om deze te laten controleren.
+Bij goedkeuring wordt de bouwsteen opgeslagen in de database.
 ###     7.2. Components
 
 > [!IMPORTANT]
