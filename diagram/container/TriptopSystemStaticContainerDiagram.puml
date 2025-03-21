@@ -8,7 +8,7 @@ title "Container diagram voor het Triptop systeem"
 Person(traveler, "Reiziger", "<<Persoon>>\nEen persoon die een vakantiereis wil plannen, boeken en beheren door verschillende bouwstenen te combineren.")
 
 Boundary(system, "Triptop", "Systeem") {
-    ContainerDb(db, "Database", "?", "Slaat inlogdata van gebruikers en hun reisgegevens op")
+    ContainerDb(db, "Database", "MongoDB", "Slaat inlogdata van gebruikers en hun reisgegevens op")
     Container(frontend, "Web applicatie", "React.js", "De website waarmee de gebruiker een reis kan plannen")
     Container(backend, "Backend", "Java Spring Boot", "Behandelt API-requests, zorgt dat data opgeslagen wordt en geeft de benodigde data terug of door naar andere API's")
 }
@@ -16,14 +16,14 @@ Boundary(system, "Triptop", "Systeem") {
 Rel_D(traveler, frontend, "Stelt reis samen op")
 Rel_D(frontend, backend, "Verstuurt API requests", "HTTP")
 Rel_U(backend, frontend, "Stuurt gegevens terug", "HTTP")
-Rel_U(backend, db, "leest/schrijft data", "?")
+Rel_U(backend, db, "leest/schrijft data", "JSON")
 
-Container_Ext(notification, "Notificatiediensten", "Web Push Notification Server, Mail Sender, emailsend24, RapidMail", "Stuurt notificatie naar de gebruiker")
+Container_Ext(notification, "Notificatiediensten", "Amazon SES API", "Stuurt e-mail naar de gebruiker")
 Container_Ext(autoverhuur, "Autoverhuurdiensten", "Cheap Flights, Booking.com, Real-time TripAdvisor Scraper API", "Laat beschikbare auto's zien")
 Container_Ext(transport, "Transportdiensten", "NS API, Cheap Flights", "Laat beschikbare transport mogelijkheden zien")
 Container_Ext(accommodatie, "Accomodatiediensten", "Booking.com, AirBnB, Real-time TripAdvisor Scraper API", "Laat beschikbare accommodatie mogelijkheden zien")
 Container_Ext(activiteiten, "Activiteitendiensten", "Real-time TripAdvisor Scraper API", "Laat beschikbare activiteiten zien in de omgeving")
-Container_Ext(kaarten, "Kaartendiensten", "Google Maps Places", "Laat routes zien")
+Container_Ext(kaarten, "Kaartendiensten", "Google Maps Places, True Way Direction", "Laat routes zien")
 Container_Ext(identity, "IdentityProvider", "WireMock", "Geeft tokens voor gebruikers en slaat deze op")
 Container_Ext(restaurant, "Restaurantdiensten", "Uber Eats Scraper APi, Real-time TripAdvisor Scraper API", "Laat beschikbare restaurants in de omgeving zien")
 

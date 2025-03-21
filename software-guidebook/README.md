@@ -108,158 +108,146 @@ Bij goedkeuring wordt de bouwsteen opgeslagen in de database.
 
 ## 8. Architectural Decision Records
 
-> [!IMPORTANT]
-> Voeg toe: 3 tot 5 ADR's die beslissingen beschrijven die zijn genomen tijdens het ontwerpen en bouwen van de software.
+In dit hoofdstukken worden verschillende beslissingen uitgelegd met behulp van ADR's.
 
-### 8.1. ADR-001 TITLE
+### 8.1. ADR-001 Kaarten API
 
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
+Datum: 2025-03-21
 
 #### Context 
 
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
+Het Triptop reisplanner systeem heeft een kaarten API nodig zodat gebruikers routes kunnen plannen. De API moet gratis
+te gebruiken zijn, de gebruiker kent de coordinaten niet persee en het systeem zal die moeten opzoeken op basis van de
+informatie van de locatie.
 
 #### Considered Options
 
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
+| Forces                                   | Google Maps Places | True Way Direction | MapboxDirection |
+|------------------------------------------|--------------------|--------------------|-----------------|
+| Kan coordinaten vinden op basis van text | ++                 | --                 | --              |
+| Snelheid                                 | ++                 | ++                 | --              |
+| Kan tussenstops inplannen                | --                 | ++                 | ++              |
+| Goede documentatie beschikbaar           | --                 | ++                 | 0               |
 
 #### Decision
 
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
+Op basis van deze de decisions forces tabel wordt het duidelijk dat er meerdere API's nodig zullen zijn. Google Maps
+Places om de coordinaten van locaties te vinden. En True Way Direction om de routes in te plannen.
 
 #### Status 
 
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
+Accepted
 
 #### Consequences 
 
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
+Er zullen meerdere API verzoeken gedaan moeten worden om routes in te plannen.
+Er zal code nodig zijn om de API's samen te laten werken.
+De totale kosten zullen hoger worden omdat er meerdere API's nodig zijn.
 
-### 8.2. ADR-002 TITLE
+### 8.2. ADR-002 Database
 
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
-
-#### Context
-
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
-
-#### Considered Options
-
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
-
-#### Decision
-
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
-
-#### Status
-
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
-
-#### Consequences
-
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
-
-### 8.3. ADR-003 TITLE
-
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
+Datum: 2025-03-21
 
 #### Context
 
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
+Het Triptop systeem moet data over de reis van een reiziger kunnen opslaan. Het systeem zelf is niet verantwoordelijk
+voor de vormgeving van de data. Het systeem zal data opslaan die gevonden is via externe API's.
 
 #### Considered Options
 
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
+| Forces                      | PostgreSQL | MongoDB | Redis | Couchbase |
+|-----------------------------|------------|---------|-------|-----------|
+| Kan flexibiele data opslaan | 0          | ++      | ++    | ++        |
+| Kennis                      | +          | 0       | -     | -         |
+| Schaalbaarheid              | +          | ++      | ++    | ++        |
+| Query mogelijkheden         | ++         | +       | 0     | +         |
+| Community support           | ++         | ++      | 0     | +         |    
 
 #### Decision
 
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
+We kiezen voor MongoDB aangezien deze database zeer geschikt is voor het opslaan van flexibele reisinformatie en goede
+community support heeft. Deze twee onderdelen wogen zwaarder mee in de beslissing, omdat Triptop geen controle heeft
+over de vormgeving van de data.
 
 #### Status
 
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
+Accepted
 
 #### Consequences
 
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
+Het team moet leren hoe MongoDB werkt.
+Reis data wordt opdezelfde manier opgeslagen als dat het gebruikt wordt in de frontend.
 
-### 8.4. ADR-004 TITLE
+### 8.3. ADR-003 Mail API
 
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
+Datum: 2025-03-21
 
 #### Context
 
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
+Het Triptop vakantieplanningssysteem moet integreren met een externe mail service API om e-mails naar klanten te
+versturen, waaronder reserveringsbevestigingen, reiswijzigingen en betalingsnotificaties. In plaats van zelf
+e-mailfunctionaliteit te implementeren, moeten we een geschikte externe API selecteren om deze verantwoordelijkheid te
+beheren.
+
+Belangrijke vereisten zijn:
+
+- Lage kosten per e-mail (essentieel voor operaties met hoog volume)
+- Mogelijkheid om een groot aantal e-mails per dag te ondersteunen
+- Betrouwbare aflevering van e-mails om te verzekeren dat klantcommunicatie wordt ontvangen
 
 #### Considered Options
 
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
+| Forces                      | Amazon SES API | SendGrid API | Mailgun API | Postmark API |
+|-----------------------------|----------------|--------------|-------------|--------------|
+| Kostenefficiëntie           | ++             | 0            | +           | -            |
+| Volumecapaciteit            | ++             | ++           | +           | 0            |
+| API Integratie              | +              | ++           | +           | ++           |
+| Betrouwbaarheid             | ++             | ++           | +           | ++           |
+| Documentatiekwaliteit       | +              | ++           | +           | ++           |
+| HTML E-mail Ondersteuning   | ++             | ++           | ++          | ++           |
+| Template Ondersteuning      | 0              | ++           | +           | +            |
+| Aangepaste Afzenderdomeinen | ++             | ++           | ++          | ++           | 
+| Prestaties                  | +              | +            | +           | ++           |
+| Bijlage Ondersteuning       | +              | ++           | ++          | +            |
 
 #### Decision
 
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
+We zullen integreren met de **Amazon SES API** voor de e-mail behoeften van Triptop.
+
+Amazon SES API biedt:
+
+- Kosten: €0,10 per 1.000 e-mails zonder maandelijkse basistarieven
+- 100K e-mails zouden precies €10,00 kosten
+- Geen extra kosten voor bijlagen (alleen standaard S3-opslagkosten indien bijlagen worden opgeslagen)
+- Standaard verzendquotum van 50.000 e-mails/dag (kan op verzoek worden verhoogd)
+
+Vergeleken met alternatieven:
+
+- SendGrid: Vanaf €14,95/maand voor 40K e-mails (€0,37/1K extra) = ~€36,95 voor 100K
+- Mailgun: €35/maand voor 50K e-mails (€0,80/1K extra) = ~€75 voor 100K
+- Postmark: €10/maand voor 10K e-mails (€1,25/1K extra) = ~€122,50 voor 100K
 
 #### Status
 
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
+Accepted
 
 #### Consequences
 
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
+##### Development
 
-### 8.5. ADR-005 TITLE
+- Eigen templating-mechanisme vereist
+- Robuuste foutafhandeling noodzakelijk voor bezorgingsissues
 
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
+#### Operations
 
-#### Context
+- IAM-permissies en AWS-account setup nodig
+- Monitoring voor quotumlimieten opzetten
+- Domeinverificatie en reputatiebeheer regelen
 
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
+#### Business
 
-#### Considered Options
-
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
-
-#### Decision
-
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
-
-#### Status
-
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
-
-#### Consequences
-
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
+- Lagere e-mailkosten bij schaalvergroting
+- Enige initiële vertragingen door AWS-configuratie
 
 ## 9. Deployment, Operation and Support
 

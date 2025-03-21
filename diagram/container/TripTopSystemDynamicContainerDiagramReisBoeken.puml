@@ -11,7 +11,7 @@ Person(traveler, "Reiziger", "<<Persoon>>\nEen persoon die een vakantiereis wil 
 Boundary(system, "Triptop", "Systeem") {
     Container(frontend, "Web applicatie", "React.js", "De website waarmee de gebruiker een reis kan plannen")
     Container(backend, "Backend", "Java Spring Boot", "Behandelt API-requests, zorgt dat data opgeslagen wordt en geeft de benodigde data terug of door naar andere API's")
-    ContainerDb(db, "Database", "?", "Slaat inlogdata van gebruikers en hun reisgegevens op")
+    ContainerDb(db, "Database", "MongoDB", "Slaat inlogdata van gebruikers en hun reisgegevens op")
 }
 Container_Ext(identity, "IdentityProvider", "WireMock", "Geeft tokens voor gebruikers en slaat deze op")
 
@@ -19,7 +19,7 @@ Rel(traveler, frontend, "Voegt bouwsteen toe")
 Rel(frontend, backend, "Stuurt API request met token en bouwsteen", "HTTP")
 Rel_Right(backend, identity, "Stuurt token controle verzoek", "HTTP")
 Rel_Left(identity, backend, "Retourneert response over token", "HTTP")
-Rel(backend, db, "Insert bouwsteen", "?")
+Rel(backend, db, "Insert bouwsteen", "JSON")
 
 
 
