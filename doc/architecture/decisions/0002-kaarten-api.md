@@ -29,3 +29,5 @@ Places om de coordinaten van locaties te vinden. En True Way Direction om de rou
 ## Consequences
 
 Er zullen meerdere API verzoeken gedaan moeten worden om routes in te plannen.
+Er zal code nodig zijn om de API's samen te laten werken.
+De totale kosten zullen hoger worden omdat er meerdere API's nodig zijn.

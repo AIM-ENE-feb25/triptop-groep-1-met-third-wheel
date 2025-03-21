@@ -24,8 +24,10 @@ voor de vormgeving van de data. Het systeem zal data opslaan die gevonden is via
 ## Decision
 
 We kiezen voor MongoDB aangezien deze database zeer geschikt is voor het opslaan van flexibele reisinformatie en goede
-community support heeft.
+community support heeft. Deze twee onderdelen wogen zwaarder mee in de beslissing, omdat Triptop geen controle heeft
+over de vormgeving van de data.
 
 ## Consequences
 
 Het team moet leren hoe MongoDB werkt.
+Reis data wordt opdezelfde manier opgeslagen als dat het gebruikt wordt in de frontend.
