@@ -1,0 +1,27 @@
+@startuml "Component diagram for FSWD Backend"
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Boundary(backend, "FSWD backend", "Spring boot") {
+Component(expenseC, ExpenseController", Spring MVC controller)
+Component(loginC, "LoginController", Spring MVC controller)
+Component(loginS, "LoginService", Spring service)
+Component(expenseS, "ExpenseService", Spring service)
+Component(loginR, "LoginRepository", Spring repository)
+Component(expenseR, "ExpenseRepository", Spring repository)
+ComponentDb(db, "Database", "H2 database")
+}
+SHOW_PERSON_OUTLINE()
+LAYOUT_WITH_LEGEND()
+
+Person(user, "user")
+Container(frontend, "FSWD frontend", React.js)
+Rel(user, frontend, "uses")
+Rel(frontend, expenseC, "sends API requests to")
+Rel(frontend, loginC, "sends API requests to")
+Rel(loginC, loginS, "uses")
+Rel(expenseC, expenseS, "uses")
+Rel(expenseS, expenseR, "uses")
+Rel(loginS, loginR, "uses")
+Rel(loginR,db, "uses" )
+Rel(expenseR,db, "uses" )
+@enduml
