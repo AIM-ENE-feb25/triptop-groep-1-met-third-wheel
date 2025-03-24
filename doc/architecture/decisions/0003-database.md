@@ -13,13 +13,15 @@ voor de vormgeving van de data. Het systeem zal data opslaan die gevonden is via
 
 ## Options
 
-| Forces                      | PostgreSQL | MongoDB | Redis | Couchbase |
-|-----------------------------|------------|---------|-------|-----------|
-| Kan flexibiele data opslaan | 0          | ++      | ++    | ++        |
-| Kennis                      | +          | 0       | -     | -         |
-| Schaalbaarheid              | +          | ++      | ++    | ++        |
-| Query mogelijkheden         | ++         | +       | 0     | +         |
-| Community support           | ++         | ++      | 0     | +         |    
+| Forces                       | PostgreSQL | MongoDB | Redis | Couchbase |
+|------------------------------|------------|---------|-------|-----------|
+| Kan flexibiele data opslaan  | 0          | ++      | ++    | ++        |
+| Kennis                       | +          | 0       | -     | -         |
+| Schaalbaarheid               | +          | ++      | ++    | ++        |
+| Query mogelijkheden          | ++         | +       | 0     | +         |
+| Community support            | ++         | ++      | 0     | +         |
+| Goed voor langduring opslaan | ++         | ++      | --    | ++        |
+| Goed voor caching            | --         | --      | ++    | --        |
 
 ## Decision
 

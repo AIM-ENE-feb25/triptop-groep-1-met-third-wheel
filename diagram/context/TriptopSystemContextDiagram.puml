@@ -13,6 +13,7 @@ Person(traveler, "Reiziger", "<<Persoon>>\nEen persoon die een vakantiereis wil 
 System(triptopSystem, "Triptop Applicatie", "<<Systeem>>\nStelt reizigers in staat om zelf hun vakantiereis samen te stellen, te boeken, te betalen en te beheren zonder dat ze een extra account hoeven aan te maken.")
 
 ' External systems (bottom) - Generalized
+System_Ext(notificationSystem, "Notificatiediensten", "<<Extern Systeem>>\nExterne diensten voor het versturen van notificaties.")
 System_Ext(accommodationSystem, "Accommodatiediensten", "<<Extern Systeem>>\nExterne diensten voor het boeken van accommodaties zoals hotels en vakantiewoningen.")
 System_Ext(transportSystem, "Transportdiensten", "<<Extern Systeem>>\nExterne diensten voor het boeken van vluchten, treintickets en andere vervoersmiddelen.")
 System_Ext(carRentalSystem, "Autoverhuurdiensten", "<<Extern Systeem>>\nExterne diensten voor het huren van auto's tijdens de reis.")
@@ -24,6 +25,7 @@ System_Ext(mapSystem, "Kaartdiensten", "<<Extern Systeem>>\nExterne diensten voo
 ' Relations
 Rel(traveler, triptopSystem, "Stelt een op maat gemaakte vakantie samen met")
 
+Rel(triptopSystem, notificationSystem, "Verstuurt notificaties")
 Rel(triptopSystem, accommodationSystem, "Boekt accommodaties")
 Rel(triptopSystem, transportSystem, "Boekt transport")
 Rel(triptopSystem, carRentalSystem, "Reserveert huurauto's")

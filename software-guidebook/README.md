@@ -10,6 +10,7 @@ Dit software guidebook geeft een overzicht van de Triptop-applicatie. Het bevat 
 ## 2. Context
 
 Het context diagram ziet er als volgt uit:
+
 ![Context diagram](../opdracht-diagrammen/Context%20diagram.png)
 
 De gebruiker is een reiziger die een reis wil plannen en boeken. Met de Triptop applicatie kan de reiziger dit doen.

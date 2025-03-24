@@ -15,7 +15,7 @@ Boundary(system, "Triptop", "Systeem") {
 Container_Ext(identity, "IdentityProvider", "WireMock", "Geeft tokens voor gebruikers en slaat deze op")
 
 Rel_Down(traveler, frontend, "Vult inloggegevens in")
-Rel_Right(frontend, identity, "Stuurt inloggegevens", "HTTP")
-Rel_Left(identity, frontend, "Stuurt token terug", "HTTP")
+Rel_Right(frontend, identity, "Stuurt inloggegevens", "HTTP/JSON")
+Rel_Left(identity, frontend, "Stuurt token terug", "HTTP/JSON")
 
 @enduml

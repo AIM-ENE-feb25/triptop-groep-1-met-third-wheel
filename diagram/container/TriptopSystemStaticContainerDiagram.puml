@@ -14,9 +14,8 @@ Boundary(system, "Triptop", "Systeem") {
 }
 
 Rel_D(traveler, frontend, "Stelt reis samen op")
-Rel_D(frontend, backend, "Verstuurt API requests", "HTTP")
-Rel_U(backend, frontend, "Stuurt gegevens terug", "HTTP")
-Rel_U(backend, db, "leest/schrijft data", "JSON")
+BiRel_D(frontend, backend, "Verstuurt API requests", "HTTP/JSON")
+BiRel_U(backend, db, "leest/schrijft data", "JSON")
 
 Container_Ext(notification, "Notificatiediensten", "Amazon SES API", "Stuurt e-mail naar de gebruiker")
 Container_Ext(autoverhuur, "Autoverhuurdiensten", "Cheap Flights, Booking.com, Real-time TripAdvisor Scraper API", "Laat beschikbare auto's zien")
@@ -29,30 +28,22 @@ Container_Ext(restaurant, "Restaurantdiensten", "Uber Eats Scraper APi, Real-tim
 
 Lay_L(backend, db)
 
-Rel_R(frontend, identity, "doet authenticatie", "HTTP")
-Rel_L(identity, frontend, "geeft token terug","HTTP")
-Rel_U(backend, identity, "valideert token","HTTP")
-Rel_D(identity, backend, "geeft response over validatie", "HTTP")
+BiRel_R(frontend, identity, "authenticaticeert gebruiker", "HTTP/JSON")
+BiRel_U(backend, identity, "valideert token","HTTP/JSON")
 
-Rel(backend, notification, "Stuurt notificatieverzoek", "HTTP")
+Rel(backend, notification, "Stuurt notificatieverzoek", "HTTP/JSON")
 
-Rel(backend, autoverhuur, "Vraagt data op met locatie", "HTTP")
-Rel(autoverhuur, backend, "Stuurt data over auto's terug", "HTTP")
+BiRel(backend, autoverhuur, "Vraagt data op met locatie", "HTTP/JSON")
 
-Rel(backend, transport, "Vraagt data op met begin- en eindpunt", "HTTP")
-Rel(transport, backend, "Stuurt data over transport terug", "HTTP")
+BiRel(backend, transport, "Vraagt data op met begin- en eindpunt", "HTTP/JSON")
 
-Rel(backend, accommodatie, "Vraagt data op met locatie", "HTTP")
-Rel(accommodatie, backend, "Stuurt data over acommmodatie terug", "HTTP")
+BiRel(backend, accommodatie, "Vraagt data op met locatie", "HTTP/JSON")
 
-Rel(backend, activiteiten, "Vraagt data op met locatie", "HTTP")
-Rel(activiteiten, backend, "Stuurt data over activiteiten terug", "HTTP")
+BiRel(backend, activiteiten, "Vraagt data op met locatie", "HTTP/JSON")
 
-Rel(backend, kaarten, "Vraagt data op met locaties", "HTTP")
-Rel(kaarten, backend, "Stuurt data over routes terug", "HTTP")
+BiRel(backend, kaarten, "Vraagt data op met locaties", "HTTP/JSON")
 
-Rel(backend, restaurant, "Vraagt data op met locatie", "HTTP")
-Rel(restaurant, backend, "Stuurt data over restaurants terug", "HTTP")
+BiRel(backend, restaurant, "Vraagt data op met locatie", "HTTP/JSON")
 
 
 

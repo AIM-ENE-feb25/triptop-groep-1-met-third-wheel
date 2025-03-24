@@ -16,9 +16,9 @@ Boundary(system, "Triptop", "Systeem") {
 Container_Ext(identity, "IdentityProvider", "WireMock", "Geeft tokens voor gebruikers en slaat deze op")
 
 Rel(traveler, frontend, "Voegt bouwsteen toe")
-Rel(frontend, backend, "Stuurt API request met token en bouwsteen", "HTTP")
-Rel_Right(backend, identity, "Stuurt token controle verzoek", "HTTP")
-Rel_Left(identity, backend, "Retourneert response over token", "HTTP")
+Rel(frontend, backend, "Stuurt API request met token en bouwsteen", "HTTP/JSON")
+Rel_Right(backend, identity, "Stuurt token controle verzoek", "HTTP/JSON")
+Rel_Left(identity, backend, "Retourneert response over token", "HTTP/JSON")
 Rel(backend, db, "Insert bouwsteen", "JSON")
 
 
