@@ -5,7 +5,7 @@ Constructor of setter dependency gebruiken.
 Andere naam: Prefer Interfaces to classes  
 Design property: coupling
 # Voorbeelden
-Voorbeeld hexagonale structuur van doex
+Voorbeeld hexagonale structuur van doex (wat aangepast)
 ## Zonder DIP
 ```java
 @Service
@@ -33,7 +33,9 @@ public class EnsembleService {
 public interface EnsembleServicePort{
     void joinAsParticipant(Ensemble ensemble, Member member);
 }
-
+public interface NotifierServicePort {
+    void memberAccepted(Ensemble ensemble, Member member);
+}
 public interface EnsembleRepository extends CrudRepository<Ensemble, Integer> {
     Optional<Ensemble> findByName(String name);
 }
@@ -42,7 +44,7 @@ public interface EnsembleRepository extends CrudRepository<Ensemble, Integer> {
 public class EnsembleService implements EnsembleServicePort {
 
     private final EnsembleRepository ensembleRepository;
-    private final NotifierService notifierService;
+    private final NotifierServicePort notifierService;
 
     public EnsembleService(EnsembleRepository ensembleRepository,
                            NotifierService notifierService) {
