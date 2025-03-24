@@ -4,19 +4,25 @@
 
 title "Backend System - Component Diagram"
 
+Container(web_app, "Web Application", "React.js Application", "Handles user interface and interactions")
+
 Container_Boundary(backend, "Backend API") {
-    Component(login_controller, "Login Controller", "REST Controller", "Handles user authentication requests")
-    Component(claim_controller, "Claim Controller", "REST Controller", "Handles insurance claim requests")
+    Component(login_controller, "Login Controller", "Component: Spring MVC Rest Controller", "Handles user authentication requests")
+    Component(claim_controller, "Claim Controller", "Component: Spring MVC Rest Controller", "Handles insurance claim requests")
 
-    Component(login_service, "Login Service", "Service", "Manages user authentication and session")
-    Component(claim_service, "Claim Service", "Service", "Processes and validates insurance claims")
-    Component(auth_service, "Authentication Service", "Service", "Verifies user credentials and manages tokens")
+    Component(login_service, "Login Service", "Component: Spring Service Bean", "Manages user authentication and session")
+    Component(claim_service, "Claim Service", "Component: Spring Service Bean", "Processes and validates insurance claims")
+    Component(auth_service, "Authentication Service", "Component: Spring Service Bean", "Verifies user credentials and manages tokens")
 
-    Component(login_repo, "Login Repository", "Repository", "Provides access to user data")
-    Component(claim_repo, "Claim Repository", "Repository", "Provides access to claim data")
+    Component(login_repo, "Login Repository", "Component: Spring Repository Bean", "Provides access to user data")
+    Component(claim_repo, "Claim Repository", "Component: Spring Repository Bean", "Provides access to claim data")
 }
 
-' Define relationships
+' Define frontend relationships
+Rel(web_app, login_controller, "Uses", "JSON/HTTP")
+Rel(web_app, claim_controller, "Uses", "JSON/HTTP")
+
+' Define internal relationships
 Rel(login_controller, login_service, "Uses", "JSON/HTTP")
 Rel(claim_controller, claim_service, "Uses", "JSON/HTTP")
 
@@ -26,4 +32,10 @@ Rel(login_service, login_repo, "Uses", "CRUD operations")
 Rel(claim_service, claim_repo, "Uses", "CRUD operations")
 Rel(claim_service, auth_service, "Uses", "Verifies authorization")
 
+
+Container(database, "Database", "H2 SQL", "Stores persistent application data")
+
+' Define database relationships
+Rel(login_repo, database, "Reads/Writes", "SQL")
+Rel(claim_repo, database, "Reads/Writes", "SQL")
 @enduml
