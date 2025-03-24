@@ -1,0 +1,29 @@
+@startuml Backend C4 Component Diagram
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title "Backend System - Component Diagram"
+
+Container_Boundary(backend, "Backend API") {
+    Component(login_controller, "Login Controller", "REST Controller", "Handles user authentication requests")
+    Component(claim_controller, "Claim Controller", "REST Controller", "Handles insurance claim requests")
+
+    Component(login_service, "Login Service", "Service", "Manages user authentication and session")
+    Component(claim_service, "Claim Service", "Service", "Processes and validates insurance claims")
+    Component(auth_service, "Authentication Service", "Service", "Verifies user credentials and manages tokens")
+
+    Component(login_repo, "Login Repository", "Repository", "Provides access to user data")
+    Component(claim_repo, "Claim Repository", "Repository", "Provides access to claim data")
+}
+
+' Define relationships
+Rel(login_controller, login_service, "Uses", "JSON/HTTP")
+Rel(claim_controller, claim_service, "Uses", "JSON/HTTP")
+
+Rel(login_service, auth_service, "Uses", "Validates credentials")
+Rel(login_service, login_repo, "Uses", "CRUD operations")
+
+Rel(claim_service, claim_repo, "Uses", "CRUD operations")
+Rel(claim_service, auth_service, "Uses", "Verifies authorization")
+
+@enduml
