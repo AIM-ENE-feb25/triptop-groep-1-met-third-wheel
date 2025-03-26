@@ -1,21 +1,22 @@
 @startuml Backend C4 Component Diagram
 
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+HIDE_STEREOTYPE()
 
 title "Backend System - Component Diagram"
 
 Container(web_app, "Web Application", "React.js Application", "Handles user interface and interactions")
 
 Container_Boundary(backend, "Backend API") {
-    Component(login_controller, "Login Controller", "Component: Spring MVC Rest Controller", "Handles user authentication requests")
-    Component(claim_controller, "Claim Controller", "Component: Spring MVC Rest Controller", "Handles insurance claim requests")
+    Component(login_controller, "Login Controller", "Component: Spring MVC Controller", "Handles user authentication requests")
+    Component(claim_controller, "Claim Controller", "Component: Spring MVC Controller", "Handles insurance claim requests")
 
-    Component(login_service, "Login Service", "Component: Spring Service Bean", "Manages user authentication and session")
-    Component(claim_service, "Claim Service", "Component: Spring Service Bean", "Processes and validates insurance claims")
-    Component(auth_service, "Authentication Service", "Component: Spring Service Bean", "Verifies user credentials and manages tokens")
+    Component(login_service, "Login Service", "Component: Spring Service", "Manages user authentication and session")
+    Component(claim_service, "Claim Service", "Component: Spring Service", "Processes and validates insurance claims")
+    Component(auth_service, "Authentication Service", "Component: Spring Service", "Verifies user credentials and manages tokens")
 
-    Component(login_repo, "Login Repository", "Component: Spring Repository Bean", "Provides access to user data")
-    Component(claim_repo, "Claim Repository", "Component: Spring Repository Bean", "Provides access to claim data")
+    Component(login_repo, "Login Repository", "Component: Spring Repository", "Provides access to user data")
+    Component(claim_repo, "Claim Repository", "Component: Spring Repository", "Provides access to claim data")
 }
 
 ' Define frontend relationships
@@ -38,4 +39,7 @@ Container(database, "Database", "H2 SQL", "Stores persistent application data")
 ' Define database relationships
 Rel(login_repo, database, "Reads/Writes", "SQL")
 Rel(claim_repo, database, "Reads/Writes", "SQL")
+
+SHOW_LEGEND()
+
 @enduml
