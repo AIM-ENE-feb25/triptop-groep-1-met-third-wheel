@@ -1,0 +1,41 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Dynamic.puml
+
+title "Component Dynamic Diagram - Authentication & Authorization Flow"
+
+Person(client, "Client", "Eindgebruiker met access token")
+
+Container_Boundary(app, "Application") {
+    Component(api_component, "API Component", "REST API", "Biedt externe toegang tot bedrijfsfuncties")
+    Component(auth_component, "Authentication Component", "Service", "Behandelt authenticatie en identiteitsvalidatie")
+    Component(authz_component, "Authorization Component", "Service", "Controleert toestemming voor acties")
+    Component(business_component, "Business Component", "Service", "Implementeert bedrijfslogica")
+    Component(gateway_component, "API Gateway Component", "Service", "Beheert communicatie met externe API's")
+    Component(integration_component, "Integration Component", "Service", "Integreert met externe systemen")
+}
+
+System_Ext(idp, "Identity Provider", "Externe OAuth2/OIDC provider")
+System_Ext(ext_api, "External API", "Externe service")
+
+' Dynamic flow tussen componenten
+Rel_D(client, api_component, "HTTP request met Bearer token", "HTTPS")
+Rel_R(api_component, auth_component, "Authenticeer gebruiker", "")
+Rel_R(auth_component, idp, "Valideer token & haal gebruikersinfo", "HTTPS")
+Rel_L(idp, auth_component, "Gebruikersidentiteit", "HTTPS")
+Rel_L(auth_component, api_component, "Geauthenticeerde gebruiker", "")
+
+Rel_D(api_component, authz_component, "Controleer autorisatie", "")
+Rel_U(authz_component, api_component, "Autorisatie resultaat", "")
+
+Rel_L(api_component, business_component, "Verwerkingsverzoek", "")
+Rel_D(business_component, gateway_component, "Externe API aanroep", "")
+Rel_R(gateway_component, integration_component, "Bereid integratie voor", "")
+Rel_L(integration_component, gateway_component, "Integratie geconfigureerd", "")
+
+Rel_D(gateway_component, ext_api, "Geauthenticeerde API request", "HTTPS")
+Rel_U(ext_api, gateway_component, "API response", "HTTPS")
+Rel_U(gateway_component, business_component, "API resultaten", "")
+Rel_L(business_component, api_component, "Verwerkingsresultaten", "")
+Rel_U(api_component, client, "HTTP response", "HTTPS")
+
+@enduml
