@@ -1,0 +1,30 @@
+@startuml
+!include <C4/C4_Component>
+
+title TripTop - Frontend Component Diagram
+SHOW_PERSON_OUTLINE()
+
+Person(user, Gebruiker, "Gebruiker interacteerd met de applicatie via browser")
+
+Boundary(system, "Triptop", "Frontend Systeem") {
+    Component(loginComponent, "Login Component", React Component, "Laat lijst met inlogmogelijkheden zien en toont de bijbehorende formulieren")
+    Component(reisplannerComponent, "Reisplanner Component", React Component, "Toont een kaart met de locaties van de bouwstenen.")
+    Component(bouwstenenLijstComponent, "Bouwstenen Lijst Component", React Component, "Toont beschikbare bouwstenen")
+}
+
+Rel(user, reisplannerComponent, "Interacteerd met")
+Rel(user, loginComponent, "Interacteerd met")
+
+
+Container(api_gateway, "API Gateway", "Routes API calls")
+Container_Ext(id_provider, "Identity Provider", WireMock, "<<Extern Systeem>>\nAuthenticeert gebruikers en geeft token terug")
+
+Rel_R(loginComponent, id_provider, "Verstuurt inlog verzoek", "HTTP/JSON")
+Rel(reisplannerComponent, api_gateway, "Calls Reisplanner API", "HTTP/JSON")
+Rel_R(reisplannerComponent, bouwstenenLijstComponent, "Heeft")
+Rel(bouwstenenLijstComponent, api_gateway, "Calls Reisplanner API", "HTTP/JSON")
+
+
+SHOW_LEGEND()
+
+@enduml
