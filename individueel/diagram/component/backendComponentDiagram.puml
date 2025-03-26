@@ -1,0 +1,35 @@
+@startuml
+!include <C4/C4_Component>
+
+LAYOUT_WITH_LEGEND()
+
+title TripTop -  backend component Diagram
+
+Person(api_gateway, "API Gateway")
+
+ContainerDb(db, "Database", "Stores application data")
+
+    Component(bouwController, "BouwsteenController", "Handles API requests")
+    Component(bouwService, "BouwsteenService", "Business logic")
+    Component(bouwRepository, "BouwsteenRepository", "Data access layer")
+
+    Rel(bouwController, bouwService, "Calls")
+    Rel(bouwService, bouwRepository, "Fetches data")
+    Rel(bouwRepository, db, "Reads/Writes")
+
+
+Container_Ext(transportAPI, "Transport API", "External API")
+Component(transportService, "TransportService", "Handles transport-related logic")
+
+Rel_R(bouwService, transportService, "Calls")
+Rel_R(transportService, transportAPI, "API requests")
+
+Container_Ext(notificatieAPI, "notificatie API", "External API")
+Component(notificatieService, "NotificatieService", "Handles notification-related logic")
+
+Rel_R(bouwService, notificatieService, "Calls")
+Rel_R(transportService, notificatieAPI, "API requests")
+
+Rel(api_gateway, bouwController, "HTTP Requests")
+
+@enduml

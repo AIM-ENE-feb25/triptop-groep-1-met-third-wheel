@@ -1,0 +1,59 @@
+bouwsteen service en bouwsteen repository
+
+
+Frontend:
+BouwstenenLijstComponent
+	- Verantwoordelijkheid: Toont de lijst met beschikbare bouwstenen en beperkt gebruikersacties op basis van de toestand van een bouwsteen.
+
+ReisplannerComponent
+	- Verantwoordelijkheid: Biedt functionaliteit om een reis te plannen en voorkomt dat een bouwsteen in een ongeldige toestand wordt gebruikt.
+
+LoginComponent
+	- Verantwoordelijkheid: Beheert de authenticatie van gebruikers.
+
+
+
+Backend:
+BouwsteenController
+	- Verantwoordelijkheid: Handelt API-verzoeken af die te maken hebben met bouwstenen en stuurt ze door naar de juiste services.
+
+BouwsteenService
+	- Verantwoordelijkheid: Bevat de business logic om te controleren of een bouwsteen in een geldige toestand verkeert voordat een actie wordt 	 	  uitgevoerd. Dit zorgt voor integriteit. checkt ook of de bouwsteen zich in de juiste toestand verkeerd.
+
+BouwsteenRepository
+	- Verantwoordelijkheid: Communiceert met de database en zorgt ervoor dat bouwstenen correct worden opgeslagen en opgehaald.
+
+TransportService
+	- Verantwoordelijkheid: Beheert transportgerelateerde logica en roept externe transport-API's aan.
+
+NotificatieService
+	- Verantwoordelijkheid: Handelt notificaties af en communiceert met de externe notificatie-API.
+
+AutoverhuurService
+	- Verantwoordelijkheid: Beheert autoverhuur logica en roept externe autoverhuur-API's aan.
+
+AccomodatieService
+	- Verantwoordelijkheid: Beheert accomodatie logica en roept externe accomodatie-API's aan.
+
+ActiviteitenService
+	- Verantwoordelijkheid: Beheert activiteiten logica en roept externe activiteiten-API's aan.
+
+KaartendienstenService
+	- Verantwoordelijkheid: Beheert kaarten logica en roept externe kaarten-API's aan.
+
+RestaurantService
+	- Verantwoordelijkheid: Beheert restaurant logica en roept externe restaurant-API's aan.
+
+
+
+interfaces
+IBouwsteenService
+Beheert de business logic van bouwstenen.
+getBouwstenen(): Retourneert een lijst van alle beschikbare bouwstenen.
+kanActieUitvoeren(bouwsteenId, actie): Controleert of een actie is toegestaan.
+updateBouwsteen(bouwsteenId, nieuweBouwsteen): Wijzigt de bouwsteen.
+
+
+IService
+Beheert de communicatie met externe API's.
+zoekData(request): Roept een externe API aan en retourneert het resultaat.
