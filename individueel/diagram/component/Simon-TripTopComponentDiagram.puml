@@ -1,0 +1,42 @@
+@startuml
+!include <C4/C4_Component>
+
+!define DottedRel(from,to,label) from -[dashed]-> to : label
+!define DottedRel_U(from,to,label) from -[dashed]up-> to : label
+!define DottedRel_D(from,to,label) from -[dashed]down-> to : label
+!define DottedRel_L(from,to,label) from -[dashed]left-> to : label
+!define DottedRel_R(from,to,label) from -[dashed]right-> to : label
+
+Container_Ext(id_provider, "Identity Provider", WireMock, "<<Extern Systeem>>\nAuthenticeert gebruikers en geeft token terug")
+
+Container(frontend, "Frontend", "React.JS", "Webapplicatie waar reiziger de reis kan plannen")
+
+Boundary(api_gateway, "Triptop", "ApiGateway Systeem") {
+    Component(api_request_interceptor, RequestInterceptor, Spring Boot Component, Onderschept alle requests naar de ApiGateway en voegt een token toe als de request geauthorizeerd is)
+    Component(api_auth, Auth, Spring Boot Component, Authenticeerd en authorizeerd gebruikers)
+    ComponentDb(api_cache, Cache, Redis, Cached de tokens van de Identity Provider)
+
+    Rel_R(api_request_interceptor, api_auth, Authorizeerd requests met)
+    Rel_R(api_auth, api_cache, Leest/Schrijft)
+}
+
+DottedRel(api_auth, id_provider, "Controleert of gebruiker geauthenticeerd is")
+Lay_R(api_cache, id_provider)
+
+Rel_D(frontend, api_request_interceptor, Verstuurt API request naar, HTTP/JSON)
+
+Boundary(backend, "Triptop", "Backend Systeem") {
+    Component(backend_request_interceptor, RequestInterceptor, Spring Boot Component, Onderschept alle requests naar de backend en staat deze alleen toe als die geauthorizeerd is)
+    Component(backend_controller, BouwsteenController, Spring MVC Controller, Handles API requests)
+    Component(backend_auth, Auth, Spring Boot Component, Controleert of de request de token gemaakt in de ApiGateway heeft.)
+
+    Rel_R(backend_request_interceptor, backend_auth, Authorizeerd requests met)
+    DottedRel_D(backend_request_interceptor, backend_controller, Verstuurt geauthorizeerde verzoeken door)
+}
+
+DottedRel_D(api_request_interceptor, backend_request_interceptor, Verstuurt geauthorizeerde verzoeken door)
+
+
+SHOW_LEGEND()
+
+@enduml

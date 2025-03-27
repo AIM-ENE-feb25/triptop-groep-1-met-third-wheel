@@ -8,7 +8,7 @@
 
 title TripTop -  Backend component Diagram
 Boundary(system, "Triptop", "Backend Systeem"){
-    Component(controller, "BouwsteenController","Spring boot Controller", "Handles API requests")
+    Component(controller, "BouwsteenController","Spring MVC Controller", "Handles API requests")
     Component(service, "BouwsteenService", "Spring boot Service", "Bevat logica om acties uit te voeren bij een bepaalde staat van een bouwsteen")
 }
 Container(frontend, "Frontend", "React.JS", "Webapplicatie waar reiziger de reis kan plannen")
