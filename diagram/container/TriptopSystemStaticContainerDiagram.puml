@@ -2,7 +2,6 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
 SHOW_PERSON_OUTLINE()
-LAYOUT_WITH_LEGEND()
 
 title "Container diagram voor het Triptop systeem"
 Person(traveler, "Reiziger", "<<Persoon>>\nEen persoon die een vakantiereis wil plannen, boeken en beheren door verschillende bouwstenen te combineren.")
@@ -47,7 +46,6 @@ BiRel(backend, kaarten, "Vraagt data op met locaties", "HTTP/JSON")
 
 BiRel(backend, restaurant, "Vraagt data op met locatie", "HTTP/JSON")
 
-
-
+SHOW_LEGEND()
 
 @enduml

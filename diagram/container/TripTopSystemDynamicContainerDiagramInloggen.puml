@@ -2,7 +2,6 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Dynamic.puml
 SHOW_PERSON_OUTLINE()
-LAYOUT_WITH_LEGEND()
 
 title "Dynamisch container diagram voor het Triptop systeem bij het inloggen"
 Person(traveler, "Reiziger", "<<Persoon>>\nEen persoon die een vakantiereis wil plannen, boeken en beheren door verschillende bouwstenen te combineren.")
@@ -17,5 +16,7 @@ Container_Ext(identity, "IdentityProvider", "WireMock", "Geeft tokens voor gebru
 Rel_Down(traveler, frontend, "Vult inloggegevens in")
 Rel_Right(frontend, identity, "Stuurt inloggegevens", "HTTP/JSON")
 Rel_Left(identity, frontend, "Stuurt token terug", "HTTP/JSON")
+
+SHOW_LEGEND()
 
 @enduml
