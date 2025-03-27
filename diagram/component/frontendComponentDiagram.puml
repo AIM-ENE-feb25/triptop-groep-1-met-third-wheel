@@ -15,8 +15,7 @@ Boundary(system, "Triptop", "Frontend Systeem") {
 Rel(user, reisplannerComponent, "Interacteerd met")
 Rel(user, loginComponent, "Interacteerd met")
 
-
-Container(api_gateway, "API Gateway", "Spring Boot" ,"Routes API calls")
+Container(api_gateway, API Gateway, Java Spring Boot, Authenticeerd en authorizeerd api requests)
 Container_Ext(id_provider, "Identity Provider", WireMock, "<<Extern Systeem>>\nAuthenticeert gebruikers en geeft token terug")
 
 Rel_R(loginComponent, id_provider, "Verstuurt inlog verzoek", "HTTP/JSON")

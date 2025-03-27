@@ -1,36 +1,40 @@
 @startuml
 !include <C4/C4_Component>
 
+!define DottedRel(from,to,label) from -[dashed]-> to : label
+!define DottedRel_U(from,to,label) from -[dashed]up-> to : label
+!define DottedRel_D(from,to,label) from -[dashed]down-> to : label
+!define DottedRel_L(from,to,label) from -[dashed]left-> to : label
+!define DottedRel_R(from,to,label) from -[dashed]right-> to : label
+
 title TripTop -  backend component Diagram
 
-Container(api_gateway, "API Gateway")
+Container(api_gateway, API Gateway, Java Spring Boot, Authenticeerd en authorizeerd api requests)
 
-ContainerDb(db, "Database", "Stores application data")
+Boundary(backend, "Triptop", "Backend Systeem") {
+    Component(backend_request_interceptor, RequestInterceptor, Spring Boot Component, Onderschept alle requests naar de backend en staat deze alleen toe als die geauthorizeerd is)
+    Component(backend_auth, Auth, Spring Boot Component, Controleert of de request de token gemaakt in de ApiGateway heeft.)
+    Component(backend_controller, BouwsteenController, Spring MVC Controller, Handles API requests)
+    Component(backend_service, BouwsteenService, Spring Boot Service, Bevat logica om acties met de bouwstenen te ondernemen als ze in een bepaalde staat zijn)
+    Component(backend_repository, BouwsteenRepository, Spring Boot Repository, Bevat logica om bouwstenen op te halen en op te slaan)
+    Component(backend_api_service, "(Bouwsteen)Service", "Spring Boot Service", "Haalt data uit de API om deze te verwerken")
 
-Boundary(system, "Triptop", "Backend Systeem"){
-    Component(bouwController, "BouwsteenController", "Handles API requests")
-    Component(bouwService, "BouwsteenService", "Business logic")
-    Component(bouwRepository, "BouwsteenRepository", "Data access layer")
-
-    Component(transportService, "TransportService", "Handles transport-related logic")
-    Component(notificatieService, "NotificatieService", "Handles notification-related logic")
+    Rel_R(backend_request_interceptor, backend_auth, Authorizeerd requests met)
+    DottedRel_D(backend_request_interceptor, backend_controller, Verstuurt geauthorizeerde verzoeken door)
+    Rel_D(backend_controller, backend_service, gebruikt)
+    DottedRel_D(backend_service, backend_repository, gebruikt)
+    Rel_R(backend_service, backend_api_service, gebruikt)
 }
 
-    Rel(bouwController, bouwService, "Calls")
-    Rel(bouwService, bouwRepository, "Fetches data")
-    Rel(bouwRepository, db, "Reads/Writes")
+Rel_D(api_gateway, backend_request_interceptor, Stuurt request door, HTTP/JSON)
 
-Container_Ext(transportAPI, "Transport API", "External API")
+ContainerDb(db, Database, MongoDb, Slaat bouwstenen op)
+Rel_D(backend_repository, db, Leest en schrijft data, MongoDB Wire Protocol)
 
-Rel_R(bouwService, transportService, "Calls")
-Rel_R(transportService, transportAPI, "API requests")
+Container_Ext(api, "Externe API", "Verschillende API's", "Bevat informatie over bouwsteen")
+Rel_R(backend_api_service, api, stuurt API-verzoek, HTTP/JSON)
 
-Container_Ext(notificatieAPI, "notificatie API", "External API")
 
-Rel_L(bouwService, notificatieService, "Calls")
-Rel_L(notificatieService, notificatieAPI, "API requests")
-
-Rel(api_gateway, bouwController, "HTTP Requests")
 
 SHOW_LEGEND()
 

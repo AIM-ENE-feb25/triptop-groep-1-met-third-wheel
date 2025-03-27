@@ -1,26 +1,34 @@
 @startuml
 !include <C4/C4_Component>
 
-title TripTop -  ApiGateway component Diagram
-
+!define DottedRel(from,to,label) from -[dashed]-> to : label
 !define DottedRel_U(from,to,label) from -[dashed]up-> to : label
 !define DottedRel_D(from,to,label) from -[dashed]down-> to : label
 !define DottedRel_L(from,to,label) from -[dashed]left-> to : label
 !define DottedRel_R(from,to,label) from -[dashed]right-> to : label
 
-Container(frontend, "Frontend", "React.JS", "Webapplicatie waar de gebruiker zich inlogt en de reis kan plannen")
-
-Boundary(system, "Triptop", "ApiGateway Systeem") {
-    Component(auth, "Authentication", "Spring boot Component")
-    Component(cache, "Cache component")
-}
-
 Container_Ext(id_provider, "Identity Provider", WireMock, "<<Extern Systeem>>\nAuthenticeert gebruikers en geeft token terug")
 
-Rel_D(frontend, auth, "Verstuurt api verzoek", Http/JSON)
+Container(frontend, "Frontend", "React.JS", "Webapplicatie waar reiziger de reis kan plannen")
 
-DottedRel_R(auth, id_provider, "Controleert of gebruiker geauthenticeerd is")
-Rel_L(auth, cache, "Checkt of de token al bekend is.")
+Boundary(api_gateway, "Triptop", "ApiGateway Systeem") {
+    Component(api_request_interceptor, RequestInterceptor, Spring Boot Component, Onderschept alle requests naar de ApiGateway en voegt een token toe als de request geauthorizeerd is)
+    Component(api_auth, Auth, Spring Boot Component, Authenticeerd en authorizeerd gebruikers)
+    ComponentDb(api_cache, Cache, Redis, Cached de tokens van de Identity Provider)
+
+    Rel_R(api_request_interceptor, api_auth, Authorizeerd requests met)
+    Rel_R(api_auth, api_cache, Leest/Schrijft)
+}
+
+DottedRel(api_auth, id_provider, "Controleert of gebruiker geauthenticeerd is")
+Lay_R(api_cache, id_provider)
+
+Rel_D(frontend, api_request_interceptor, Verstuurt API request naar, HTTP/JSON)
+
+Container(backend, "Backend", "Java Spring Boot", "Behandelt API-requests, zorgt dat data opgeslagen wordt en geeft de benodigde data terug of door naar andere API's")
+
+DottedRel_D(api_request_interceptor, backend, Verstuurt geauthorizeerde verzoeken door)
+
 
 SHOW_LEGEND()
 

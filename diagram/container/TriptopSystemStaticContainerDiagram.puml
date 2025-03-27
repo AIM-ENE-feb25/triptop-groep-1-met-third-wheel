@@ -10,11 +10,13 @@ Person(traveler, "Reiziger", "<<Persoon>>\nEen persoon die een vakantiereis wil 
 Boundary(system, "Triptop", "Systeem") {
     ContainerDb(db, "Database", "MongoDB", "Slaat inlogdata van gebruikers en hun reisgegevens op")
     Container(frontend, "Web applicatie", "React.js", "De website waarmee de gebruiker een reis kan plannen")
+    Container(api_gateway, "API Gateway", Java Spring Boot, Authenticeerd en authorizeerd api requests)
     Container(backend, "Backend", "Java Spring Boot", "Behandelt API-requests, zorgt dat data opgeslagen wordt en geeft de benodigde data terug of door naar andere API's")
 }
 
 Rel_D(traveler, frontend, "Stelt reis samen op")
-BiRel_D(frontend, backend, "Verstuurt API requests", "HTTP/JSON")
+BiRel_D(frontend, api_gateway, "Verstuurt API requests", "HTTP/JSON")
+BiRel_D(api_gateway, backend, Stuurt API requests door, "HTTP/JSON")
 BiRel_U(backend, db, "leest/schrijft data", "JSON")
 
 Container_Ext(notification, "Notificatiediensten", "Amazon SES API", "Stuurt e-mail naar de gebruiker")
@@ -29,7 +31,7 @@ Container_Ext(restaurant, "Restaurantdiensten", "Uber Eats Scraper APi, Real-tim
 Lay_L(backend, db)
 
 BiRel_R(frontend, identity, "authenticaticeert gebruiker", "HTTP/JSON")
-BiRel_U(backend, identity, "valideert token","HTTP/JSON")
+BiRel_U(api_gateway, identity, "valideert token","HTTP/JSON")
 
 Rel(backend, notification, "Stuurt notificatieverzoek", "HTTP/JSON")
 
