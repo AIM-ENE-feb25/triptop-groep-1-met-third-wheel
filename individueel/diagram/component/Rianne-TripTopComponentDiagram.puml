@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Component>
+
+title TripTop -  Backend component Diagram
+Boundary(system, "Triptop", "Backend Systeem"){
+    Component(service, "BouwsteenService", "Spring boot Service", "Bevat logica om componenten op te halen")
+    Component(apiService, "(Bouwsteen)Service", "Spring Boot Service", "Haalt data uit de API om deze te verwerken")
+    Component(controller, "BouwsteenController","Spring boot Controller", "Handles API requests")
+
+
+}
+
+
+Container(frontend, "Frontend", "React.JS", "Webapplicatie waar reiziger de reis kan plannen")
+ContainerDb(db, "Database", "MongoDB" ,Slaat data op van de reis)
+Container_Ext(api, "Externe API", "Verschillende API's", "Bevat informatie over bouwsteen")
+Rel(service, db, "Slaat Bouwsteen op [Http/JSON]")
+Rel(frontend, controller, "doet API-verzoek [Http/JSON]")
+Rel(controller, service, "heeft")
+Rel(service, apiService, "heeft")
+Rel(apiService, api, "stuurt API-verzoek [Http, JSON] ")
+SHOW_LEGEND()
+@enduml

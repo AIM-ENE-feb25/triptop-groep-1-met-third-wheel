@@ -16,7 +16,7 @@ Rel(user, reisplannerComponent, "Interacteerd met")
 Rel(user, loginComponent, "Interacteerd met")
 
 
-Container(api_gateway, "API Gateway", "Routes API calls")
+Container(api_gateway, "API Gateway", "Spring Boot" ,"Routes API calls")
 Container_Ext(id_provider, "Identity Provider", WireMock, "<<Extern Systeem>>\nAuthenticeert gebruikers en geeft token terug")
 
 Rel_R(loginComponent, id_provider, "Verstuurt inlog verzoek", "HTTP/JSON")

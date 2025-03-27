@@ -8,10 +8,10 @@ title TripTop -  ApiGateway component Diagram
 !define DottedRel_L(from,to,label) from -[dashed]left-> to : label
 !define DottedRel_R(from,to,label) from -[dashed]right-> to : label
 
-Container(frontend, "Frontend")
+Container(frontend, "Frontend", "React.JS", "Webapplicatie waar de gebruiker zich inlogt en de reis kan plannen")
 
 Boundary(system, "Triptop", "ApiGateway Systeem") {
-    Component(auth, "Authentication component")
+    Component(auth, "Authentication", "Spring boot Component")
     Component(cache, "Cache component")
 }
 
@@ -20,7 +20,7 @@ Container_Ext(id_provider, "Identity Provider", WireMock, "<<Extern Systeem>>\nA
 Rel_D(frontend, auth, "Verstuurt api verzoek", Http/JSON)
 
 DottedRel_R(auth, id_provider, "Controleert of gebruiker geauthenticeerd is")
-DottedRel_L(auth, cache, "Checkt of de token al bekend is.")
+Rel_L(auth, cache, "Checkt of de token al bekend is.")
 
 SHOW_LEGEND()
 

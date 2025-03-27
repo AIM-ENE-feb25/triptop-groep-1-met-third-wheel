@@ -1,0 +1,21 @@
+@startuml
+!include <C4/C4_Component>
+
+!define DottedRel_U(from,to,label) from -[dashed]up-> to : label
+!define DottedRel_D(from,to,label) from -[dashed]down-> to : label
+!define DottedRel_L(from,to,label) from -[dashed]left-> to : label
+!define DottedRel_R(from,to,label) from -[dashed]right-> to : label
+
+title TripTop -  Backend component Diagram
+Boundary(system, "Triptop", "Backend Systeem"){
+    Component(controller, "BouwsteenController","Spring boot Controller", "Handles API requests")
+    Component(service, "BouwsteenService", "Spring boot Service", "Bevat logica om acties uit te voeren bij een bepaalde staat van een bouwsteen")
+}
+Container(frontend, "Frontend", "React.JS", "Webapplicatie waar reiziger de reis kan plannen")
+ContainerDb(db, "Database", "MongoDB" ,Slaat data op van de reis)
+
+DottedRel_R(service, db, "Slaat Bouwsteen op [Http/JSON]")
+Rel(frontend, controller, "doet API-verzoek [Http/JSON]")
+Rel(controller, service, "heeft")
+SHOW_LEGEND()
+@enduml
