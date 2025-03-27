@@ -1,0 +1,30 @@
+@startuml
+title Triptop Class Diagram
+class BouwsteenService{
+    + ZetOpKaart()
+}
+
+abstract class Bouwsteen {
+    - naam : String
+}
+
+interface BouwsteenStatus {
+ + getStatus
+}
+
+class Geboekt
+class Beschikbaar
+class NietBeschikbaar
+class OpKaart
+
+class APIBouwsteen
+note left: Per API een andere klasse en andere extra inhoud
+
+Bouwsteen --> " - huidigeStatus"BouwsteenStatus
+BouwsteenService --> " - bouwsteen" Bouwsteen
+Bouwsteen ^-- APIBouwsteen
+BouwsteenStatus ^-- Geboekt
+BouwsteenStatus ^-- Beschikbaar
+BouwsteenStatus ^-- NietBeschikbaar
+BouwsteenStatus ^-- OpKaart
+@enduml

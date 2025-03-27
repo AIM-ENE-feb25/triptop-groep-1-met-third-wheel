@@ -1,0 +1,35 @@
+@startuml
+title Triptop Class Diagram
+class BouwsteenService{
+
+}
+
+abstract class Bouwsteen {
+    - naam : String
+    - type : String
+    - link : String
+    - info : String
+}
+
+class ApiBouwsteen
+note left: Per API een andere klasse en andere extra inhoud
+
+abstract class ApiService{
+    - restClient : RestTemplate
+}
+class NotificatieService
+
+abstract class ApiServiceMetLocatie
+class KaartenService
+class ApiBouwsteenService
+note left: Per API een andere klasse en andere extra inhoud
+
+
+BouwsteenService -->"- bouwstenen" Bouwsteen
+Bouwsteen ^-- ApiBouwsteen
+BouwsteenService --> " - services" ApiService
+ApiService ^-- NotificatieService
+ApiService ^-- ApiServiceMetLocatie
+ApiServiceMetLocatie --> "kaartenservice"KaartenService
+ApiServiceMetLocatie ^-- "ApiBouwsteenService"
+@enduml
