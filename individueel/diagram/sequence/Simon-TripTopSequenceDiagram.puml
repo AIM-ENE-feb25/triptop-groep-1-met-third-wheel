@@ -1,0 +1,31 @@
+@startuml
+title TripTop ApiGateway Authentication Sequence
+
+participant "Client" as client
+participant "InboundRequestFilter" as filter
+participant "AuthStrategyFactory" as factory
+participant "AuthStrategy" as strategy
+participant "RestTemplate" as rest
+
+client -> filter: HTTP Request with token
+activate filter
+note right: doFilter()
+
+filter -> factory: authStrategy = getStrategy(strategyType)
+
+filter -> strategy: isAuthenticated = isAuthenticated(token)
+
+strategy -> rest: validToken = post
+
+strategy --> filter: authentication result
+deactivate strategy
+
+alt is authenticated
+    filter --> client: forward request
+else is not authenticated
+    filter --> client: return 401 Unauthorized
+end
+
+deactivate filter
+
+@enduml
