@@ -31,3 +31,5 @@ ecosysteem zit waar de rest van de TripTop applicatie ook mee gemaakt wordt.
 
 Consequentie hiervoor is dat er geen gebruik gemaakt kan worden van de Filter interface van Spring Boot Web maar er moet
 gebruik gemaakt worden van de GlobalFilter en Ordered interfaces van Spring Cloud Gateway. 
+Het is makkelijk om te wisselen naar een nieuwe server omdat er maar op een plek het URL domein gebruikt wordt.
+Het is makkelijk om te wisselenen aar een microservice structuur met meerdere kleine servers.
