@@ -6,6 +6,8 @@ Date: 2025-03-27
 
 Proposed
 
+Superceded by [8. Use Spring Cloud Gateway for gateway](0008-use-spring-cloud-gateway-for-gateway.md)
+
 ## Context
 
 De applicatie moet beveiligd worden. Op alle requests moeten tokens aanwezig zijn en geverifieerd worden. Er hoeft enkel

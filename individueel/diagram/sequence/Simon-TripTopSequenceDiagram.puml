@@ -8,8 +8,6 @@ participant "AuthStrategy" as strategy
 participant "RestTemplate" as rest
 
 client -> filter: HTTP Request with token
-activate filter
-note right: doFilter()
 
 filter -> factory: authStrategy = getStrategy(strategyType)
 
@@ -18,11 +16,10 @@ filter -> strategy: isAuthenticated = isAuthenticated(token)
 strategy -> rest: validToken = post
 
 strategy --> filter: authentication result
-deactivate strategy
 
-alt is authenticated
-    filter --> client: forward request
-else is not authenticated
+alt isAuthenticated
+    filter --> backend: forward request
+else
     filter --> client: return 401 Unauthorized
 end
 
