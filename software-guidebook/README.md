@@ -114,8 +114,8 @@ Voordat deze casusomschrijving tot stand kwam, heeft de opdrachtgever de volgend
 
 ## 5. Constraints
 
-> [!IMPORTANT]
-> Beschrijf zelf de beperkingen die op voorhand bekend zijn die invloed hebben op keuzes die wel of niet gemaakt kunnen of mogen worden.
+De TripTop applicatie moet geschreven worden in Java met Spring Boot. Dit is nodig omdat het belangrijk is dat er snel prototypes en de volledige applicatie gemaakt kunnen worden, en het onderzoeks team alleen bekend is met Java en Spring Boot.
+
 
 ## 6. Principles
 - Open/Closed Principle
@@ -299,5 +299,14 @@ Accepted
 
 ## 9. Deployment, Operation and Support
 
-> [!TIP]
-> Zelf beschrijven van wat je moet doen om de software te installeren en te kunnen runnen.
+De volgende software is vereist:
+
+> Java 24
+> 
+> Maven
+
+Om de applicatie te runnen moet je het volgende doen:
+- Start de API Gateway door de `Main` klasse te runnen
+- Start de backend door de `SpringBootApplication` klasse te runnen
+- Stuur API requests naar `http://localhost:8000` op een van de volgende endpooints:
+  - `/api/bouwsteen`
