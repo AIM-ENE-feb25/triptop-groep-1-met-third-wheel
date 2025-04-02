@@ -15,6 +15,12 @@ class BouwsteenController {
         bouwstenen.put(1, new Bouwsteen("Hotel", 1));
     }
 
+    @PostMapping("/{id}/plan")
+    public String plan(@PathVariable int id) {
+        getBouwsteen(id).plan();
+        return getStatus(id);
+    }
+
     @PostMapping("/{id}/pasAan")
     public String pasAan(@PathVariable int id) {
         getBouwsteen(id).pasAan();
