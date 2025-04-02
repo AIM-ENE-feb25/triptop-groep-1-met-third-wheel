@@ -1,0 +1,42 @@
+@startuml
+
+hide circle
+skinparam classAttributeIconSize 0
+
+title TripTop ApiGateway RequestInterceptor class diagram
+
+interface Filter <<interface>> {
+    - doFilter()
+}
+note "Komt van Spring Boot" as filterNote
+
+filterNote .. Filter
+
+class InboundRequestFilter {
+}
+
+class RestTemplate{
+}
+
+note "Komt van Spring Boot" as restTemplateNote
+restTemplateNote .. RestTemplate
+
+class AuthStrategyFactory {
+    + AuthStrategy getStrategy(String strategyType)
+}
+
+abstract class AuthStrategy <<abstract class>> {
+    - boolean isAuthenticated(String: token)
+}
+
+InboundRequestFilter -up-^ Filter
+InboundRequestFilter -right-> "- authStrategyFactory" AuthStrategyFactory
+
+AuthStrategyFactory ..> AuthStrategy : <<creates>>
+InboundRequestFilter ..> AuthStrategy : <<uses>>
+
+
+AuthStrategy -up-> "- restTempalte" RestTemplate
+
+
+@enduml
