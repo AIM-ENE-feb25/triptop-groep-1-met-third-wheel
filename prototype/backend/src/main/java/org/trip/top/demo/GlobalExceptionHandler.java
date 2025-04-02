@@ -1,8 +1,8 @@
 package org.trip.top.demo;
 
-import com.prototype_state.prototype.domain.state.IllegalStateActionException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.trip.top.demo.bouwsteen.state.IllegalStateActionException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
