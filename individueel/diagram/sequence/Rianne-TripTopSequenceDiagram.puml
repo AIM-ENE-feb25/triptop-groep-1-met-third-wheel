@@ -1,0 +1,15 @@
+@startuml
+title TripTop Restaurant API Sequence
+actor Gebruiker
+participant "BouwsteenService : bouwsteenService" as bouwsteenService
+participant "RestaurantService : restaurantService" as restaurantService
+participant "ApiMetLocatie : apiMetLocatie" as apiMetLocatie
+
+Gebruiker -> bouwsteenService : getRestaurantsVanLocatie("Amsterdam")
+    alt service instanceOf RestaurantService
+                bouwsteenService -> restaurantService : getBouwstenen("Amsterdam")
+
+            end
+
+
+@enduml
