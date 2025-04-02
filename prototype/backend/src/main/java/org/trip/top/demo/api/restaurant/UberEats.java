@@ -14,7 +14,9 @@ public class UberEats extends RestaurantAPI {
 
     @Override
     public RestaurantBouwsteen voerAPICallUit(String value) {
-        return new RestaurantBouwsteen("De hele maan",
+        return new RestaurantBouwsteen(
+                3,
+                "De hele maan",
                 "test.nl",
                 "Nieuw restaurant in Amsterdam",
                 kaartenService.getCoordinaten("Amsterdam"));

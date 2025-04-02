@@ -3,27 +3,34 @@ package org.trip.top.demo.bouwsteen;
 import org.trip.top.demo.Locatie;
 import org.trip.top.demo.bouwsteen.state.BouwsteenStatus;
 import org.trip.top.demo.bouwsteen.state.Gepland;
+import org.trip.top.demo.bouwsteen.state.IllegalStateActionException;
 
 public abstract class Bouwsteen {
-    private BouwsteenStatus status;
+    protected BouwsteenStatus status;
     protected String naam;
-    private int id;
+    protected int id;
     protected String type;
     protected String link;
     protected String info;
     protected Locatie locatie;
 
+    public Bouwsteen() {
+        this.status = null;
+    }
+
     public Bouwsteen(String naam, int id) {
         this.naam = naam;
         this.id = id;
-        this.status = new Gepland();
+        this.status = null;
     }
 
     public String setStatus(BouwsteenStatus newStatus) {
-        var statusUpdate = "Status veranderd naar: " + newStatus.getStatusName();
-        System.out.println(statusUpdate);
         this.status = newStatus;
-        return statusUpdate;
+        return "Status veranderd naar: " + newStatus.getStatusName();
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getNaam() {
@@ -46,27 +53,42 @@ public abstract class Bouwsteen {
         return locatie;
     }
 
-    public Bouwsteen pasAan() {
-        return status.pasAan(this);
+    public BouwsteenStatus getStatus() {
+        return status;
+    }
+
+    public void plan() {
+        setStatus(new Gepland());
+    }
+
+    private void controleerBouwsteenStatus() {
+    if (status == null)
+      throw new IllegalStateActionException(
+          "Bouwsteen moet eerst gepland worden voordat er acties ondernomen kunnen worden.");
+    }
+
+    public void pasAan() {
+        controleerBouwsteenStatus();
+        status.pasAan(this);
     }
 
     public void regel() {
+        controleerBouwsteenStatus();
         status.regel(this);
     }
 
     public void betaal() {
+        controleerBouwsteenStatus();
         status.betaal(this);
     }
 
     public void voerUit() {
+        controleerBouwsteenStatus();
         status.voerUit(this);
     }
 
     public void annuleer() {
+        controleerBouwsteenStatus();
         status.annuleer(this);
-    }
-
-    public String getStatus() {
-        return status.getStatusName();
     }
 }

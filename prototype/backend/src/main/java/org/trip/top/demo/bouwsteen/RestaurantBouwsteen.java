@@ -7,7 +7,8 @@ public class RestaurantBouwsteen extends Bouwsteen {
         type = "Restaurant";
     }
 
-    public RestaurantBouwsteen(String naam, String link, String info, Locatie locatie) {
+    public RestaurantBouwsteen(int id, String naam, String link, String info, Locatie locatie) {
+        this.id = id;
         this.naam = naam;
         this.link = link;
         this.info = info;
