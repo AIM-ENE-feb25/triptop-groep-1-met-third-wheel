@@ -5,12 +5,12 @@ participant "BouwsteenController : bouwsteenController" as controller
 participant "BouwsteenService : bouwsteenService" as service
 participant "RestaurantService : restaurantService" as restaurantService
 participant "RestaurantAPI : restaurantAPI" as restaurantAPI
-Gebruiker -> controller : getAlleRestaurants("Amsterdam")
-controller -> service : getAlleRestaurantsOpLocatie("Amsterdam")
+Gebruiker -> controller : getAlleRestaurants(locatie)
+controller -> service : getAlleRestaurantsOpLocatie(locatie)
     alt service instanceOf RestaurantService
-                service -> restaurantService : getBouwstenen("Amsterdam")
+                service -> restaurantService : getBouwstenen(locatie)
         loop api in apis
-             restaurantService -> restaurantAPI : List<Bouwsteen> bouwstenen = overAPICallUit("Amsterdam")
+             restaurantService -> restaurantAPI : List<Bouwsteen> bouwstenen = overAPICallUit(locatie)
         end
 
 restaurantService --> service: List<Bouwsteen> bouwstenen

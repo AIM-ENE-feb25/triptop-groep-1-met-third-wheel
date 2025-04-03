@@ -139,6 +139,7 @@ In het volgende diagram is een klassendiagram te zien waarbij de BouwsteenServic
 In het prototype is er niet gebruik gemaakt van het opslaan van de lijst met bouwstenen in een database, maar deze uitbreiding kan zeker nog 
 gemaakt worden. In dit prototype worden Restaurants opgehaald. Dit is een voorbeeld maar dit kunnen verschillende diensten zijn.
 
+![Klassendiagram voor facade](./images/class_diagrams/Triptop_Api_Services_Class_Diagram.png)
 De RestaurantService heeft een lijst met verschillende restaurantAPI's, deze hebben van de abstracte klasse API een methode genaamd voerAPICallUit().
 Deze klasse maakt gebruik van generics omdat het type bouwsteen wat eruitkomt, nog niet bekend is in eerste instantie.
 De informatie uit de API's zijn gemockt omdat het niet relevant was om dit te koppelen aan een echte API. 
@@ -150,6 +151,8 @@ maar dit zou in een waarde die vanuit de frontend meegegeven kan worden, zijn.
 Nadeel van deze facade, wat ook in de bijbehorende ADR besproken wordt, is dat de code moeilijker te begrijpen is.
 De uiteindelijke methode waarmee de API-call wordt gemaakt, ligt drie lagen diep (zie het sequentiediagram hieronder). 
 Ook wordt er bijvoorbeeld in het klassendiagram gebruik gemaakt van verschillende abstracte klassen die vaak er alleen zijn vanwege de naam en niet veel implementatie hebben.
+
+![Sequence diagrammen voor facade](./images/sequence_diagrams/Triptop_Api_Services_Sequence_Diagram.png)
 
 ## 8. Architectural Decision Records
 
