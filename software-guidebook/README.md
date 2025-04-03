@@ -1,51 +1,3 @@
-<!-- TOC -->
-* [Software Guidebook Triptop](#software-guidebook-triptop)
-  * [1. Introduction](#1-introduction)
-  * [2. Context](#2-context)
-  * [3. Functional Overview](#3-functional-overview)
-    * [3.1 User Stories](#31-user-stories)
-      * [3.1.1 User Story 1: Reis plannen](#311-user-story-1-reis-plannen)
-      * [3.1.2 User Story 2: Reis boeken](#312-user-story-2-reis-boeken)
-      * [3.1.3 User Story 3: Reis cancelen](#313-user-story-3-reis-cancelen)
-      * [3.1.4 User Story 4: Reisstatus bewaren](#314-user-story-4-reisstatus-bewaren-)
-      * [3.1.5 User Story 5: Bouwstenen flexibel uitbreiden](#315-user-story-5-bouwstenen-flexibel-uitbreiden)
-    * [3.2 Domain Story Reis Boeken (AS IS)](#32-domain-story-reis-boeken-as-is)
-    * [3.3 Domain Story Reis Boeken (TO BE)](#33-domain-story-reis-boeken-to-be)
-    * [3.4 Domain Model](#34-domain-model)
-  * [4. Quality Attributes](#4-quality-attributes)
-  * [5. Constraints](#5-constraints)
-  * [6. Principles](#6-principles)
-  * [7. Software Architecture](#7-software-architecture)
-    * [7.1. Containers](#71-containers)
-      * [7.1.1 Inloggen](#711-inloggen)
-      * [7.1.2 Reis boeken](#712-reis-boeken)
-    * [7.2. Components](#72-components)
-    * [7.3. Design & Code](#73-design--code)
-  * [8. Architectural Decision Records](#8-architectural-decision-records)
-    * [8.1. ADR-001 Kaarten API](#81-adr-001-kaarten-api)
-      * [Context](#context-)
-      * [Considered Options](#considered-options)
-      * [Decision](#decision)
-      * [Status](#status-)
-      * [Consequences](#consequences-)
-    * [8.2. ADR-002 Database](#82-adr-002-database)
-      * [Context](#context)
-      * [Considered Options](#considered-options-1)
-      * [Decision](#decision-1)
-      * [Status](#status)
-      * [Consequences](#consequences)
-    * [8.3. ADR-003 Mail API](#83-adr-003-mail-api)
-      * [Context](#context-1)
-      * [Considered Options](#considered-options-2)
-      * [Decision](#decision-2)
-      * [Status](#status-1)
-      * [Consequences](#consequences-1)
-        * [Development](#development)
-      * [Operations](#operations)
-      * [Business](#business)
-  * [9. Deployment, Operation and Support](#9-deployment-operation-and-support)
-<!-- TOC -->
-
 # Software Guidebook Triptop
 
 ## 1. Introduction
@@ -149,10 +101,36 @@ Bij goedkeuring wordt de bouwsteen opgeslagen in de database.
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
 
-###     7.3. Design & Code
+### Nieuwe bouwstenen toevoegen
 
-> [!IMPORTANT]
-> Voeg toe: Per ontwerpvraag een Class Diagram plus een Sequence Diagram van een aantal scenario's inclusief begeleidende tekst.
+Het componentdiagram over nieuwe bouwstenen toevoegen staat hieronder. De BouwsteenService heeft verschillende API-services, waardoor het 
+makkelijk is om nog een toe te voegen, zolang deze van het type APIService is. De API-service heeft verschillende componenten, de API's. 
+Deze maken contact met de externe API's. De gevonden bouwstenen kunnen ook nog opgeslagen worden in de mongoDB Database via de BouwsteenRepository
+
+###     7.3. Design & Code
+In de volgende subhoofdstukken worden de drie design patterns voor de ontwerpvragen besproken.
+
+#### Facade voor nieuwe bouwstenen
+
+Voor het toevoegen van nieuwe bouwstenen en nieuwe diensten is ervoor gekozen om de facade pattern te gebruiken.
+Dit om het maken van API-requests achter een facade te houden. Dit is het duidelijkste te zien bij de Kaartenservice,
+want bij de functies zie je niet direct dat een API-request wordt gemaakt.
+
+In het volgende diagram is een klassendiagram te zien waarbij de BouwsteenService verschillende api-services heeft en een repository.
+In het prototype is er niet gebruik gemaakt van het opslaan van de lijst met bouwstenen in een database, maar deze uitbreiding kan zeker nog 
+gemaakt worden. In dit prototype worden Restaurants opgehaald. Dit is een voorbeeld maar dit kunnen verschillende diensten zijn.
+
+De RestaurantService heeft een lijst met verschillende restaurantAPI's, deze hebben van de abstracte klasse API een methode genaamd voerAPICallUit().
+Deze klasse maakt gebruik van generics omdat het type bouwsteen wat eruitkomt, nog niet bekend is in eerste instantie.
+De informatie uit de API's zijn gemockt omdat het niet relevant was om dit te koppelen aan een echte API. 
+
+Daarnaast is er nog een methode in de BouwstenenService genaamd 'getRouteNaarBouwsteen'. Dit is om te laten zien dat de KaartenService een facade is.
+Hierbij wordt een bouwsteen meegegeven met een locatie. Het beginpunt van een route is niet goed geïmplementeerd (alleen eindbestemming is bekend,
+maar dit zou in een waarde die vanuit de frontend meegegeven kan worden, zijn. 
+
+Nadeel van deze facade, wat ook in de bijbehorende ADR besproken wordt, is dat de code moeilijker te begrijpen is.
+De uiteindelijke methode waarmee de API-call wordt gemaakt, ligt drie lagen diep (zie het sequentiediagram hieronder). 
+Ook wordt er bijvoorbeeld in het klassendiagram gebruik gemaakt van verschillende abstracte klassen die vaak er alleen zijn vanwege de naam en niet veel implementatie hebben.
 
 ## 8. Architectural Decision Records
 
