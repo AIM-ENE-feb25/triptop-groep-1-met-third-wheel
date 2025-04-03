@@ -1,0 +1,191 @@
+{
+	"info": {
+		"_postman_id": "fa3d131f-555a-4f10-9dff-85c4b884f177",
+		"name": "SOEX",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "38366011"
+	},
+	"item": [
+		{
+			"name": "Route naar bouwsteen",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/bouwsteen/route?id=1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"bouwsteen",
+						"route"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Restaurant bouwstenen",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\": \"edevries\", \"application\": \"triptop\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/bouwsteen/restaurant?locatie=Amsterdam",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"bouwsteen",
+						"restaurant"
+					],
+					"query": [
+						{
+							"key": "locatie",
+							"value": "Amsterdam"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Plan",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": "{{url}}/bouwsteen/1/plan"
+			},
+			"response": []
+		},
+		{
+			"name": "Pas aan",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": "{{url}}/bouwsteen/1/pasAan"
+			},
+			"response": []
+		},
+		{
+			"name": "Regel",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": "{{url}}/bouwsteen/1/regel"
+			},
+			"response": []
+		},
+		{
+			"name": "Betaal",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": "{{url}}/bouwsteen/1/betaal"
+			},
+			"response": []
+		},
+		{
+			"name": "Voer uit",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": "{{url}}/bouwsteen/1/voerUit"
+			},
+			"response": []
+		},
+		{
+			"name": "Annuleer",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": "{{url}}/bouwsteen/1/annuleer"
+			},
+			"response": []
+		},
+		{
+			"name": "Status",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": "{{url}}/bouwsteen/1/status"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"pm.request.addHeader({key: \"auth-type\", value: \"google\"});\r",
+					"pm.request.addHeader({key: \"token\", value: \"ju5fdqkszix8cud2\"});\r",
+					"pm.request.addHeader({key: \"username\", value: \"edevries\"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:8000",
+			"type": "default"
+		}
+	]
+}

@@ -19,7 +19,7 @@ public class BouwsteenService {
     @Autowired
     public BouwsteenService(List<ApiService> apiServices, MockBouwsteenRepository mockBouwsteenRepository) {
         this.apiServices = apiServices;
-        this.mockBouwsteenRepository = mockBouwsteenRepository
+        this.mockBouwsteenRepository = mockBouwsteenRepository;
     }
 
 
@@ -57,8 +57,8 @@ public class BouwsteenService {
     }
 
     public String pasBouwsteenAan(int id){
-        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id;
-        bouwsteen).pasAan();
+        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id);
+        bouwsteen.pasAan();
         mockBouwsteenRepository.saveBouwsteen(bouwsteen);
         return getStatus(id);
     }

@@ -27,7 +27,7 @@ public class InboundRequestFilter implements GlobalFilter, PriorityOrdered {
     ServerHttpRequest request = exchange.getRequest();
 
     var parameterMap = request.getHeaders().toSingleValueMap();
-
+    System.out.println(parameterMap);
     try {
       AuthStrategy authStrategy = authStrategyFactory.getStrategy(parameterMap.get("auth-type"));
       boolean isAuthenticated = false;
