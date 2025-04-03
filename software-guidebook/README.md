@@ -96,16 +96,33 @@ De reiziger voegt op de website een bouwsteen toe. Deze bevat informatie van een
 De web applicatie stuurt een API-request door naar de backend met deze bouwsteen en de token van de reiziger.
 De backend stuurt de token op naar de Identity Provider om deze te laten controleren.
 Bij goedkeuring wordt de bouwsteen opgeslagen in de database.
+
 ###     7.2. Components
 
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
 
-### Nieuwe bouwstenen toevoegen
+#### Nieuwe bouwstenen toevoegen
 
 Het componentdiagram over nieuwe bouwstenen toevoegen staat hieronder. De BouwsteenService heeft verschillende API-services, waardoor het 
 makkelijk is om nog een toe te voegen, zolang deze van het type APIService is. De API-service heeft verschillende componenten, de API's. 
 Deze maken contact met de externe API's. De gevonden bouwstenen kunnen ook nog opgeslagen worden in de mongoDB Database via de BouwsteenRepository
+
+#### Api authenticatie en authorizatie
+
+Het component diagram over hoe er voor gezorgd wordt dat authenticatie en authorisatie consistent worden toegepast bij het communiceren met verschillende externe APIs staat hieronder.
+Dit is geinterpreteerd als dat gebruikers geauthenticeerd en geauthorizeerd moeten zijn voor de specifieke requests die ze willen maken.
+
+Hiervoor wordt gebruik gemaakt van een aparte ApiGateway die daarin alle requests authenticeerd en authorizeerd.
+Het Auth component zal verantwoordelijk zijn voor het bekijken wat voor type request er gedaan wordt en of de gebruiker die mag maken.
+
+Als het Auth component de request toestaat zal de RequestInterceptor een extra token toevoegen die gebruikt zal worden door de backend om te valideren dat de request via de Api Gateway gemaakt is.
+Daarna stuurd de RequestInterceptor de request door naar de backend.
+
+De backend heeft zijn eigen RequestInterceptor en Auth componenten die samen van alle requests valideren dat ze gemaakt zijn via de Api Gateway.
+
+![Component diagram api authenticatie en authorizatie](./images/component_diagrams/onterwerpvraag/Triptop_Api_Authenticatie_Authorizatie_Component_Diagram.png)
+
 
 ###     7.3. Design & Code
 In de volgende subhoofdstukken worden de drie design patterns voor de ontwerpvragen besproken.
