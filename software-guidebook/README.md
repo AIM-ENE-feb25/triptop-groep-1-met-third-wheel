@@ -108,6 +108,8 @@ Het componentdiagram over nieuwe bouwstenen toevoegen staat hieronder. De Bouwst
 makkelijk is om nog een toe te voegen, zolang deze van het type APIService is. De API-service heeft verschillende componenten, de API's. 
 Deze maken contact met de externe API's. De gevonden bouwstenen kunnen ook nog opgeslagen worden in de mongoDB Database via de BouwsteenRepository
 
+![Component diagram nieuwe bouwstenen toevoegen](./images/component_diagrams/onterwerpvraag/Triptop_Extra_Bouwstenen_Component_Diagram.png)
+
 #### Api authenticatie en authorizatie
 
 Het component diagram over hoe er voor gezorgd wordt dat authenticatie en authorisatie consistent worden toegepast bij het communiceren met verschillende externe APIs staat hieronder.
