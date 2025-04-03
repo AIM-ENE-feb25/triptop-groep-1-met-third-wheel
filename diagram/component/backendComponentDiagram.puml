@@ -1,12 +1,38 @@
 @startuml
 !include <C4/C4_Component>
 
-!define DottedRel(from,to,label) from -[dashed]-> to : label
-!define DottedRel_U(from,to,label) from -[dashed]up-> to : label
-!define DottedRel_D(from,to,label) from -[dashed]down-> to : label
-!define DottedRel_L(from,to,label) from -[dashed]left-> to : label
-!define DottedRel_R(from,to,label) from -[dashed]right-> to : label
+$addRelTagToLegend(D_Rel, "black", "gray", $DASHED_LINE, Not always executed, dashed line)
 
+!unquoted procedure D_Rel($from, $to, $label, $techn="", $descr="", $sprite="", $tags="D_Rel", $link="", $direction = "")
+!if ($direction == right)
+    $getRel(("-[dashed]right->>"), $from, $to, $label, $techn, $descr, $sprite, $tags, $link)
+!elseif ($direction == left)
+    $getRel(("-[dashed]left->>"), $from, $to, $label, $techn, $descr, $sprite, $tags, $link)
+!elseif ($direction == up)
+    $getRel(("-[dashed]up->>"), $from, $to, $label, $techn, $descr, $sprite, $tags, $link)
+!elseif ($direction == down)
+    $getRel(("-[dashed]down->>"), $from, $to, $label, $techn, $descr, $sprite, $tags, $link)
+!else
+    $getRel("-[dashed]->>", $from, $to, $label, $techn, $descr, $sprite, $tags, $link)
+!endif
+increment()
+!endprocedure
+
+!unquoted procedure D_Rel_R($from, $to, $label, $techn="", $descr="", $sprite="", $tags="", $link="")
+D_Rel($from, $to, $label, $techn, $descr, $sprite, D_Rel, $link, right)
+!endprocedure
+
+!unquoted procedure D_Rel_L($from, $to, $label, $techn="", $descr="", $sprite="", $tags="", $link="")
+D_Rel($from, $to, $label, $techn, $descr, $sprite, D_Rel, $link, left)
+!endprocedure
+
+!unquoted procedure D_Rel_U($from, $to, $label, $techn="", $descr="", $sprite="", $tags="", $link="")
+D_Rel($from, $to, $label, $techn, $descr, $sprite, D_Rel, $link, up)
+!endprocedure
+
+!unquoted procedure D_Rel_D($from, $to, $label, $techn="", $descr="", $sprite="", $tags="", $link="")
+D_Rel($from, $to, $label, $techn, $descr, $sprite, D_Rel, $link, down)
+!endprocedure
 title TripTop -  backend component Diagram
 
 Container(api_gateway, API Gateway, Java Spring Boot, Authenticeerd en authorizeerd api requests)
@@ -20,9 +46,9 @@ Boundary(backend, "Triptop", "Backend Systeem") {
     Component(backend_api_service, "(Bouwsteen)Service", "Spring Boot Service", "Haalt data uit de API om deze te verwerken")
 
     Rel_R(backend_request_interceptor, backend_auth, Authorizeerd requests met)
-    DottedRel_D(backend_request_interceptor, backend_controller, Verstuurt geauthorizeerde verzoeken door)
+    D_Rel_D(backend_request_interceptor, backend_controller, Verstuurt geauthorizeerde verzoeken door)
     Rel_D(backend_controller, backend_service, gebruikt)
-    DottedRel_D(backend_service, backend_repository, gebruikt)
+    D_Rel_D(backend_service, backend_repository, gebruikt)
     Rel_R(backend_service, backend_api_service, gebruikt)
 }
 

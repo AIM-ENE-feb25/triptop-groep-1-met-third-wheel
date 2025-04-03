@@ -2,7 +2,6 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
 SHOW_PERSON_OUTLINE()
-LAYOUT_WITH_LEGEND()
 
 title "Context diagram voor het Triptop systeem"
 
@@ -31,4 +30,6 @@ Rel(triptopSystem, activitySystem, "Boekt activiteiten en excursies")
 Rel(triptopSystem, foodSystem, "Reserveert eetgelegenheden")
 Rel(triptopSystem, mapSystem, "Plant routes")
 Rel(triptopSystem, identityProvider, "Authenticeert gebruikers")
+
+SHOW_LEGEND()
 @enduml
