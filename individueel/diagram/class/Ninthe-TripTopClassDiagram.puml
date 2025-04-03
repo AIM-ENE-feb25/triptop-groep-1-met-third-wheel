@@ -1,38 +1,70 @@
 @startuml
 title Triptop Class Diagram
+class BouwsteenController{
++ plan(int id): String
++ pasAan(int id): String
++ regel(int id): String
++ betaal(int id): String
++ annuleer(int id): String
++ voerUit(int id): String
+}
+
 class BouwsteenService{
-   + findById(bouwsteenId)
-   + voerUit(actie)
-   + updateBouwsteen(bouwsteen)
+   + plan(int id): String
+   + pasAan(int id): String
+   + regel(int id): String
+   + betaal(int id): String
+   + annuleer(int id): String
+   + voerUit(int id): String
+}
+
+class MockRepository{
+ - bouwstenen: List<Bouwsteen>
+ + getBouwsteenById(id): Bouwsteen
+ + saveBouwsteen(bouwsteen): void
 }
 
 class Bouwsteen {
-    - naam : String
-    - id : int
+    # naam : String
+    # id : int
+    - controleerStatus();
+    + pasAan(): void
+    + regel(): void
+    + betaal(): void
+    + annuleer(): void
+    + voerUit(): void
 }
 
-abstract class BouwsteenStatus {
-- bouwsteen: Bouwsteen
- + pasAan(): Bouwsteen
- + regel(): Bouwsteen
- + betaal(): Bouwsteen
- + voerUit(): Bouwsteen
- + annuleer(): Bouwsteen
- + getStatusName(): string
+interface BouwsteenStatus {
+ + pasAan(bouwsteen): void
+ + regel(bouwsteen): void
+ + betaal(bouwsteen): void
+ + voerUit(bouwsteen): void
+ + annuleer(bouwsteen): void
+ + getStatusName(bouwsteen): string
 }
 
-class Gepland
-class Geregeld
-class Betaald
-class NietUitvoerbaar
+class Gepland{
++ pasAan(bouwsteen)
++ regel(bouwsteen)
+}
+class Geregeld{
++betaal(bouwsteen)
++annuleer(bouwsteen)
+}
+class Betaald{
++voerUit(bouwsteen)
+}
+class NietUitvoerbaar{
++ voerUit(bouwsteen)
+}
 class Uitgevoerd
 
-class APIBouwsteen
-note left: Per API een andere klasse en andere extra inhoud
 
-Bouwsteen --> " - huidigeStatus"BouwsteenStatus
+BouwsteenController --> "- bouwsteenService"BouwsteenService
+Bouwsteen --> " # bouwsteenStatus"BouwsteenStatus
 BouwsteenService --> " - bouwsteen" Bouwsteen
-Bouwsteen ^-- APIBouwsteen
+BouwsteenService --> " - mockRepository" MockRepository
 BouwsteenStatus ^-- Gepland
 BouwsteenStatus ^-- Geregeld
 BouwsteenStatus ^-- Betaald
