@@ -625,12 +625,14 @@ De volgende software is vereist:
 > Java 24
 > 
 > Maven
+> 
+> Postman
 
 Om de applicatie te runnen moet volgende gedaan worden:
 - Start de API Gateway door de `Main` klasse te runnen
 - Start de backend door de `DemoApplication` klasse te runnen
 - Run de mock ID provider door de `DemoApplication` klasse te runnen
-- Importeer de [postman collectie](../prototype/Prototype.postman_collection) in PostMan
+- Importeer de [postman collectie](../prototype/SOEX.postman_collection.json) in PostMan
 - Voer de requests uit
   - Om te testen dat de API gateway werkt kan je in de pre-request scripts van de collectie een van de headers veranderen.
   - Ook kan de url variabele verandert worden naar http://localhost:8080 om te zien dat de requests hetzelfde resultaat opleveren.
