@@ -1,60 +1,64 @@
 package com.prototype_state.prototype.service;
 
-import java.util.HashMap;
-import java.util.Map;
-import com.prototype_state.prototype.domain.Bouwsteen;
+import com.prototype_state.prototype.MockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BouwsteenService {
- private Map<Integer, Bouwsteen> bouwstenen = new HashMap<>();
-
+ private final MockRepository mockRepository;
  @Autowired
- public BouwsteenService() {
-  bouwstenen.put(1, new Bouwsteen("Hotel", 1));
+ public BouwsteenService(MockRepository mockRepository) {
+  this.mockRepository = mockRepository;
  }
 
  public String plan(int id) {
-  getBouwsteen(id).plan();
+  var bouwsteen = mockRepository.getBouwsteenById(id);
+  bouwsteen.plan();
+  mockRepository.saveBouwsteen(bouwsteen);
   return getStatus(id);
  }
 
  public String pasAan(int id) {
-  getBouwsteen(id).pasAan();
+  var bouwsteen = mockRepository.getBouwsteenById(id);
+          bouwsteen.pasAan();
+  mockRepository.saveBouwsteen(bouwsteen);
   return getStatus(id);
  }
 
  public String regel(int id) {
-  getBouwsteen(id).regel();
+  var bouwsteen = mockRepository.getBouwsteenById(id);
+  bouwsteen.regel();
+  mockRepository.saveBouwsteen(bouwsteen);
   return getStatus(id);
  }
 
  public String betaal(int id) {
-  getBouwsteen(id).betaal();
+  var bouwsteen = mockRepository.getBouwsteenById(id);
+  bouwsteen.betaal();
+  mockRepository.saveBouwsteen(bouwsteen);
   return getStatus(id);
  }
 
  public String voerUit(int id) {
-  getBouwsteen(id).voerUit();
+  var bouwsteen = mockRepository.getBouwsteenById(id);
+  bouwsteen.voerUit();
+  mockRepository.saveBouwsteen(bouwsteen);
   return getStatus(id);
  }
 
  public String annuleer(int id) {
-  getBouwsteen(id).annuleer();
+  var bouwsteen = mockRepository.getBouwsteenById(id);
+  bouwsteen.annuleer();
+  mockRepository.saveBouwsteen(bouwsteen);
   return getStatus(id);
  }
 
  public String getStatus(int id) {
-  if (getBouwsteen(id).getStatus() == null) {
-   return "Huidige status: " + getBouwsteen(id).getStatus();
-  } else {
-   return "Huidige status: " + getBouwsteen(id).getStatus().getStatusName();
+  if(mockRepository.getBouwsteenById(id).getStatus() == null) {
+   return "Huidige status: " + mockRepository.getBouwsteenById(id).getStatus();
+  }else{
+   return "Huidige status: " + mockRepository.getBouwsteenById(id).getStatus().getStatusName();
   }
- }
-
- private Bouwsteen getBouwsteen(int id) {
-  return bouwstenen.getOrDefault(id, new Bouwsteen("Onbekend", id));
  }
 }

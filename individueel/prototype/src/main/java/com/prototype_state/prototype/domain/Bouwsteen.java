@@ -18,6 +18,10 @@ public class Bouwsteen {
         return status;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String setStatus(BouwsteenStatus newStatus) {
         this.status = newStatus;
         return "Status veranderd naar: " + newStatus.getStatusName();

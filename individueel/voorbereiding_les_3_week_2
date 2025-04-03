@@ -47,7 +47,7 @@ RestaurantService
 
 
 interfaces
-IBouwsteenService
+IBouwsteen
 Beheert de business logic van bouwstenen.
 getBouwstenen(): Retourneert een lijst van alle beschikbare bouwstenen.
 kanActieUitvoeren(bouwsteenId, actie): Controleert of een actie is toegestaan.
