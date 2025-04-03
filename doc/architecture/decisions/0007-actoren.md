@@ -1,4 +1,4 @@
-# 7. actoren
+# 7. Actoren
 
 Date: 2025-03-27
 
@@ -23,7 +23,7 @@ De vraag is voor welke actoren de TripTop applicatie gemaakt moet worden.
 ## Decision
 
 We kiezen ervoor om in het begin alleen de reiziger als actor te beschouwen om de time to market te verkleinen. Wanneer
-er meer tijd is wordt er eerst voor de reisagent ontwikkeld omdat er voor een beheerder niet veel te beheren is.
+er meer tijd is, wordt er eerst voor de reisagent ontwikkeld omdat er voor een beheerder niet veel te beheren is.
 
 ## Consequences
 

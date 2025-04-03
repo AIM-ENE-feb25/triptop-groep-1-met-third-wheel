@@ -3,11 +3,11 @@
 
 title TripTop -  Backend component Diagram
 Boundary(system, "Triptop", "Backend Systeem"){
-    Component(service, "BouwsteenService", "Spring Boot Service", "Bevat logica om componenten op te halen")
-    Component(apiService, "(Bouwsteen)Service", "Spring Boot Service", "Haalt data uit de API om deze te verwerken")
-    Component(controller, "BouwsteenController","Spring Boot Controller", "Handles API requests")
+    Component(Bouwsteenservice, "BouwsteenService", "Spring Boot Service", "Bevat logica om componenten op te halen")
+    Component(service, "ApiService", "Spring Boot Service", "Haalt data uit de API om deze te verwerken")
+    Component(controller, "BouwsteenController","Spring Boot Controller", "Stuurt API-requests van frontend door naar de service")
     Component(repo, "BouwsteenRepository", Spring Boot Repository, "Verstuurt bouwsteenen naar de database")
-
+    Component(apiService, "API", "Spring Boot Component", "Verstuurt API-verzoeken naar externe API's")
 }
 
 
@@ -16,9 +16,10 @@ ContainerDb(db, "Database", "MongoDB" ,Slaat data op van de reis)
 Container_Ext(api, "Externe API", "Verschillende API's", "Bevat informatie over bouwsteen")
 Rel(repo, db, Slaat Bouwsteen op, MongoDb Wire Protocol)
 Rel(frontend, controller, doet API-verzoek, HTTP/JSON)
-Rel(controller, service, "gebruikt")
+Rel(controller, Bouwsteenservice, "gebruikt")
+Rel(Bouwsteenservice, service, "gebruikt")
 Rel(service, apiService, "gebruikt")
-Rel(service, repo, "gebruikt")
+Rel(Bouwsteenservice, repo, "gebruikt")
 Rel(apiService, api, stuurt API-verzoek, HTTP/JSON)
 SHOW_LEGEND()
 @enduml

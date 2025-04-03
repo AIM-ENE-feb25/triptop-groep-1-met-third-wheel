@@ -1,4 +1,4 @@
-# 6. boeken
+# 6. Boeken
 
 Date: 2025-03-27
 

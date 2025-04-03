@@ -1,51 +1,3 @@
-<!-- TOC -->
-* [Software Guidebook Triptop](#software-guidebook-triptop)
-  * [1. Introduction](#1-introduction)
-  * [2. Context](#2-context)
-  * [3. Functional Overview](#3-functional-overview)
-    * [3.1 User Stories](#31-user-stories)
-      * [3.1.1 User Story 1: Reis plannen](#311-user-story-1-reis-plannen)
-      * [3.1.2 User Story 2: Reis boeken](#312-user-story-2-reis-boeken)
-      * [3.1.3 User Story 3: Reis cancelen](#313-user-story-3-reis-cancelen)
-      * [3.1.4 User Story 4: Reisstatus bewaren](#314-user-story-4-reisstatus-bewaren-)
-      * [3.1.5 User Story 5: Bouwstenen flexibel uitbreiden](#315-user-story-5-bouwstenen-flexibel-uitbreiden)
-    * [3.2 Domain Story Reis Boeken (AS IS)](#32-domain-story-reis-boeken-as-is)
-    * [3.3 Domain Story Reis Boeken (TO BE)](#33-domain-story-reis-boeken-to-be)
-    * [3.4 Domain Model](#34-domain-model)
-  * [4. Quality Attributes](#4-quality-attributes)
-  * [5. Constraints](#5-constraints)
-  * [6. Principles](#6-principles)
-  * [7. Software Architecture](#7-software-architecture)
-    * [7.1. Containers](#71-containers)
-      * [7.1.1 Inloggen](#711-inloggen)
-      * [7.1.2 Reis boeken](#712-reis-boeken)
-    * [7.2. Components](#72-components)
-    * [7.3. Design & Code](#73-design--code)
-  * [8. Architectural Decision Records](#8-architectural-decision-records)
-    * [8.1. ADR-001 Kaarten API](#81-adr-001-kaarten-api)
-      * [Context](#context-)
-      * [Considered Options](#considered-options)
-      * [Decision](#decision)
-      * [Status](#status-)
-      * [Consequences](#consequences-)
-    * [8.2. ADR-002 Database](#82-adr-002-database)
-      * [Context](#context)
-      * [Considered Options](#considered-options-1)
-      * [Decision](#decision-1)
-      * [Status](#status)
-      * [Consequences](#consequences)
-    * [8.3. ADR-003 Mail API](#83-adr-003-mail-api)
-      * [Context](#context-1)
-      * [Considered Options](#considered-options-2)
-      * [Decision](#decision-2)
-      * [Status](#status-1)
-      * [Consequences](#consequences-1)
-        * [Development](#development)
-      * [Operations](#operations)
-      * [Business](#business)
-  * [9. Deployment, Operation and Support](#9-deployment-operation-and-support)
-<!-- TOC -->
-
 # Software Guidebook Triptop
 
 ## 1. Introduction
@@ -114,7 +66,7 @@ Voordat deze casusomschrijving tot stand kwam, heeft de opdrachtgever de volgend
 
 ## 5. Constraints
 
-De TripTop applicatie moet geschreven worden in Java met Spring Boot. Dit is nodig omdat het belangrijk is dat er snel prototypes en de volledige applicatie gemaakt kunnen worden, en het onderzoeks team alleen bekend is met Java en Spring Boot.
+De TripTop applicatie moet geschreven worden in Java met Spring Boot. Dit is nodig omdat het belangrijk is dat er snel prototypes en de volledige applicatie gemaakt kunnen worden, en het onderzoeksteam alleen bekend is met Java en Spring Boot.
 
 
 ## 6. Principles
@@ -125,7 +77,7 @@ De TripTop applicatie moet geschreven worden in Java met Spring Boot. Dit is nod
 
 ###     7.1. Containers
 Het statische container diagram staat hieronder.
-![Statisch container diagram](../opdracht-diagrammen/Static%20container%20diagram.png)
+![Statisch container diagram](../opdracht-diagrammen/Static%20container%20diagram.png)  
 De reiziger bezoekt de website, deze communiceert met de Identity Provider bij het inloggen.
 Als de reiziger al ingelogd is en andere acties doet, controleert de backend dat de token klopt.
 De backend vraagt informatie op van de externe API's en geeft deze terug naar de webapplicatie.
@@ -149,10 +101,36 @@ Bij goedkeuring wordt de bouwsteen opgeslagen in de database.
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
 
-###     7.3. Design & Code
+### Nieuwe bouwstenen toevoegen
 
-> [!IMPORTANT]
-> Voeg toe: Per ontwerpvraag een Class Diagram plus een Sequence Diagram van een aantal scenario's inclusief begeleidende tekst.
+Het componentdiagram over nieuwe bouwstenen toevoegen staat hieronder. De BouwsteenService heeft verschillende API-services, waardoor het 
+makkelijk is om nog een toe te voegen, zolang deze van het type APIService is. De API-service heeft verschillende componenten, de API's. 
+Deze maken contact met de externe API's. De gevonden bouwstenen kunnen ook nog opgeslagen worden in de mongoDB Database via de BouwsteenRepository
+
+###     7.3. Design & Code
+In de volgende subhoofdstukken worden de drie design patterns voor de ontwerpvragen besproken.
+
+#### Facade voor nieuwe bouwstenen
+
+Voor het toevoegen van nieuwe bouwstenen en nieuwe diensten is ervoor gekozen om de facade pattern te gebruiken.
+Dit om het maken van API-requests achter een facade te houden. Dit is het duidelijkste te zien bij de Kaartenservice,
+want bij de functies zie je niet direct dat een API-request wordt gemaakt.
+
+In het volgende diagram is een klassendiagram te zien waarbij de BouwsteenService verschillende api-services heeft en een repository.
+In het prototype is er niet gebruik gemaakt van het opslaan van de lijst met bouwstenen in een database, maar deze uitbreiding kan zeker nog 
+gemaakt worden. In dit prototype worden Restaurants opgehaald. Dit is een voorbeeld maar dit kunnen verschillende diensten zijn.
+
+De RestaurantService heeft een lijst met verschillende restaurantAPI's, deze hebben van de abstracte klasse API een methode genaamd voerAPICallUit().
+Deze klasse maakt gebruik van generics omdat het type bouwsteen wat eruitkomt, nog niet bekend is in eerste instantie.
+De informatie uit de API's zijn gemockt omdat het niet relevant was om dit te koppelen aan een echte API. 
+
+Daarnaast is er nog een methode in de BouwstenenService genaamd 'getRouteNaarBouwsteen'. Dit is om te laten zien dat de KaartenService een facade is.
+Hierbij wordt een bouwsteen meegegeven met een locatie. Het beginpunt van een route is niet goed geïmplementeerd (alleen eindbestemming is bekend,
+maar dit zou in een waarde die vanuit de frontend meegegeven kan worden, zijn. 
+
+Nadeel van deze facade, wat ook in de bijbehorende ADR besproken wordt, is dat de code moeilijker te begrijpen is.
+De uiteindelijke methode waarmee de API-call wordt gemaakt, ligt drie lagen diep (zie het sequentiediagram hieronder). 
+Ook wordt er bijvoorbeeld in het klassendiagram gebruik gemaakt van verschillende abstracte klassen die vaak er alleen zijn vanwege de naam en niet veel implementatie hebben.
 
 ## 8. Architectural Decision Records
 
@@ -296,6 +274,293 @@ Accepted
 
 - Lagere e-mailkosten bij schaalvergroting
 - Enige initiële vertragingen door AWS-configuratie
+
+
+### 8.4. ADR-004 Gateway Security
+
+Datum: 2025-03-27
+
+#### Context 
+
+De applicatie moet beveiligd worden. Op alle requests moeten tokens aanwezig zijn en geverifieerd worden. Er hoeft enkel
+gekeken te worden of de gebruiker geauthorizeerd is, verder moeten geen acties ondernomen worden.
+
+#### Considered Options
+
+| Forces                                 | Spring Security | Spring Boot Filters | ClientHttpRequestInterceptor |
+|----------------------------------------|-----------------|---------------------|------------------------------|
+| Moet incoming requests kunnen filteren | ++              | ++                  | --                           |
+| Moet eenvoudig zijn                    | -               | ++                  | +                            |
+| Staat custom filters toe               | ++              | ++                  | ++                           |    
+
+#### Decision
+
+We kiezen voor Spring Boot Filters omdat dit een envoudige manier is om een filter uit te voeren op alle requests. Omdat
+het voor ons enorm belangrijk is dat het eenvoudig is en we geen extra acties moeten ondernemen, daarom is de extra
+complexiteit van Spring Security ongewenst.
+
+#### Status
+
+Accepted
+
+Superceded by [8. Use Spring Cloud Gateway for gateway](../doc/architecture/decisions/0008-use-spring-cloud-gateway-for-gateway.md)
+
+
+#### Consequences
+
+- We kunnen eenvoudig nieuwe filters toevoegen.
+- We moeten Spring Boot gebruiken.
+
+
+### 8.5. ADR-005 Boeken
+
+Datum: 2025-03-27
+
+#### Context
+
+Reizigers willen bouwstenen van hun reis kunnen boeken.
+
+#### Considered Options
+
+| Forces                     | Via TripTop direct boeken | Reiziger boekt zelf via bouwsteen |
+|----------------------------|---------------------------|-----------------------------------|
+| Gemak voor eindgebruiker   | ++                        | --                                |
+| Ontwikkel complexiteit     | --                        | ++                                |
+| Vereist extra API requests | --                        | ++                                |
+| Data privacy               | --                        | ++                                |
+| Flexibiliteit              | -                         | ++                                |
+
+#### Decision
+
+Wij kiezen ervoor dat de reiziger zelf boekt via de bouwsteen, omdat we het belangrijk vinden dat TripTop eerst snel
+ontwikkeld kan worden voordat extra functionaliteiten aangeboden worden. TripTop geeft de reiziger een link om te
+boeken.
+
+#### Status
+
+Proposed
+
+#### Consequences
+
+- TripTop moet een URL geven waarmee de reiziger de bouwsteen kan boeken
+- Het is minder gebruikersvriendelijk
+- De gebruiker heeft meer controle over zijn eigen reserveringen
+- Minder technische ondersteuning nodig bij problemen met boeken
+- Snellere time-to-market voor het product
+- Mogelijk lagere conversie doordat het externe proces minder soepel kan zijn
+- Geen direct zicht op boekingsdata van reizigers
+
+
+### 8.6. ADR-006 Actoren
+
+Datum: 2025-03-27
+
+#### Context
+
+De vraag is voor welke actoren de TripTop applicatie gemaakt moet worden.
+
+#### Considered Options
+
+| Forces                 | Beheerder | Reisagent | Reiziger |
+|------------------------|-----------|-----------|----------|
+| Complexiteit           | --        | -         | +        |
+| Relevant voor opdracht | --        | -         | ++       |
+| Ontwikkeltijd          | --        | -         | +        |
+| Onderhoudbaarheid      | --        | -         | +        |
+| Gebruikerservaring     | +         | +         | ++       |
+
+#### Decision
+
+We kiezen ervoor om in het begin alleen de reiziger als actor te beschouwen om de time to market te verkleinen. Wanneer
+er meer tijd is, wordt er eerst voor de reisagent ontwikkeld omdat er voor een beheerder niet veel te beheren is.
+
+
+#### Status
+
+Proposed
+
+#### Consequences
+
+- Door in eerste instantie alleen de reiziger te ondersteunen, kan er sneller een eerste versie van de applicatie op de
+  markt worden gebracht.
+- Het risico bestaat dat andere belanghebbenden, zoals reisagenten, minder snel betrokken raken.
+- Extra kosten en inspanningen zijn mogelijk nodig bij het later toevoegen van functionaliteiten voor andere actoren.
+- De beperkte scope biedt strategisch voordeel door een gerichtere en meer gefocuste applicatie te ontwikkelen.
+
+### 8.7. ADR-007 Gebruik van Spring Cloud Gateway voor gateway
+
+Datum: 2025-03-31
+
+#### Context
+
+Om te zorgen dat alle requests via de gateway doorgaan naar de backend server wanneer ze door alle filters gaan moet er
+een technology gebruikt worden voor het doorsturen van requests.
+
+#### Considered Options
+
+| Forces        | Maak de doorstuur technology zelf | Spring Cloud Gateway |
+|---------------|-----------------------------------|----------------------|
+| Complexiteit  | ?                                 | ++                   |
+| Onderhoud     | --                                | ++                   |
+| Performance   | ?                                 | +                    |
+| Flexibiliteit | ?                                 | ++                   |
+
+#### Decision
+
+We kiezen om Spring Cloud Gateway te gebruiken, omdat het biedt wat nodig is en in het Spring
+ecosysteem zit, waar de rest van de TripTop applicatie ook mee gemaakt wordt.
+
+#### Status
+
+Accepted
+
+Supercedes [5. gateway security](../doc/architecture/decisions/0005-gateway-security.md)
+
+#### Consequences
+
+Consequentie hiervoor is dat er geen gebruik gemaakt kan worden van de Filter interface van Spring Boot Web, maar er moet
+gebruik gemaakt worden van de GlobalFilter en Ordered interfaces van Spring Cloud Gateway.
+Het is makkelijk om te wisselen naar een nieuwe server, omdat er maar op een plek het URL domein gebruikt wordt.
+Het is makkelijk om te wisselen naar een microservice structuur met meerdere kleine servers.
+
+### 8.8. ADR-008 Strategy design pattern voor authenticatie
+
+Datum: 2025-03-31
+
+#### Context
+
+In het prototype is gebruik gemaakt van de Strategy en Factory Method patterns.
+In code ziet het er als volgt uit:
+
+```java
+AuthStrategy authStrategy = authStrategyFactory.getStrategy(parameterMap.get("auth-type"));
+boolean isAuthenticated = false;
+isAuthenticated = authStrategy;
+
+authenticate(parameterMap);
+```
+
+```java
+
+@Component
+public class AuthStrategyFactory {
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    public AuthStrategy getStrategy(String authType) {
+        return switch (authType) {
+            case "mock" -> new MockAuthStrategy(restTemplate);
+            case "google" -> new GoogleMockAuthStrategy(restTemplate);
+            default -> throw new IllegalArgumentException("Unknown auth type: " + authType);
+        };
+    }
+}
+```
+
+```java
+public abstract class AuthStrategy {
+    protected final RestTemplate restTemplate;
+    protected final String authApiLink;
+    protected final String strategyName;
+
+    protected AuthStrategy(RestTemplate restTemplate, String authApiLink, String strategyName) {
+        this.restTemplate = restTemplate;
+        this.authApiLink = authApiLink;
+        this.strategyName = strategyName;
+    }
+
+    public abstract boolean authenticate(Map<String, String> requestParams);
+}
+```
+
+#### Considered Options
+
+| Forces                                            | Strategy ja | Strategy nee | Factory ja | Factory nee |
+|---------------------------------------------------|-------------|--------------|------------|-------------|
+| Frontend kan authenticatie methode bepalen        | ++          | --           | ++         | ++          |
+| Backend code volgt single responsiblity principle | ++          | --           | ++         | --          |
+
+#### Decision
+
+Dit werkt goed en staat gemakkelijk toe om nieuwe authenticatie strategien toe te voegen. Ook kan de frontend bepalen
+welke strategy gebruikt moet worden. De frontend weet dit omdat het inloggen met de Identity Provider direct vanaf de
+frontend gebeurt.
+
+#### Status
+
+Accepted
+
+#### Consequences
+
+Het is makkelijk om nieuwe inlog-mogelijkheden toe te voegen.
+Er moet altijd een inlog-strategy gebruikt worden.
+Er moet samengewerkt worden vanuit de frontend en backend voor de namen van de headers.
+
+### 8.9. ADR-009 Design pattern voor toevoegen van API's
+
+Datum: 2025-03-31
+
+#### Context
+
+Voor TripTop is het belangrijk dat er nieuwe API diensten toegevoegd kunnen worden zonder dat er bestaande bron code
+veranderd moet worden. In het prototype is er gebruik gemaakt van het Facade pattern en de vraag is of dit een goed
+design pattern is voor deze ontwerp vraag.
+
+#### Considered Options
+
+| Forces                                      | Ja | nee |
+|---------------------------------------------|----|-----|
+| Volgt Dependency Inversion Principle        | ++ | --  |
+| Volgt Single Responsibilty Principle        | ++ | --  |
+| Makkelijk uit te breiden met meerdere API's | ++ | -   |
+
+#### Decision
+
+We gaan gebruik maken van dit design pattern, in het prototype is de facade op de KaartenService en de RestaurantService. Die verbergt dat er
+een API call gedaan wordt om informatie uit de API's te krijgen..
+
+#### Status
+
+Accepted
+
+#### Consequences
+
+- Het is makkelijker om te wisselen tussen coordinaten en adressen.
+- Je moet door meer lagen stappen om de code te begrijpen.
+
+### 8.10. ADR-010 Design pattern voor status van Bouwstenen
+
+Datum: 2025-03-28
+
+#### Context
+
+Bouwstenen kunnen verschillende statussen hebben, zoals Gepland, Geregeld, Betaald, NietUitvoerbaar en Uitgevoerd. Het gedrag van het systeem is afhankelijk van de huidige status van een Bouwsteen.
+nu moeten we beslissen of we het state pattern daarvoor willen volgen of het op een andere manier oplossen door functies te laten checken of bepaalde acties mogelijk zijn.
+In een propotype is het uitgewerkt met BouwsteenStatus. De forces worden beoordeeld met behulp van dit prototype.
+
+#### Considered Options
+
+| Forces                                | state pattern | geen state pattern |
+|---------------------------------------|---------------|--------------------|
+| Complexiteit                          | -             | +                  |
+| onderhoudbaarheid                     | ++            | -                  |
+| leesbaarheid                          | +             | -                  | 
+| volgt Single Responsibility Principle | ++            | --                 |
+| volgt Open/Closed Principle           | ++            | -                  |
+
+#### Decision
+
+Op basis van de forces kies ik er wel voor om de state pattern te gebruiken. het zorgt er namelijk voor dat alle states gescheiden blijven dus kan je er gemakkelijk een toevoegen of veranderen.
+
+#### Status
+
+Accepted
+
+#### Consequences
+
+- Beter onderhoudbaar
+- Voegt veel complexiteit toe
+- Volgt de design principes gekozen voor deze opdracht
+
 
 ## 9. Deployment, Operation and Support
 

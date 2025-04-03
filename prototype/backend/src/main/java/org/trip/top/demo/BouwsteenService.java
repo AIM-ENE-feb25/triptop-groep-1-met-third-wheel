@@ -6,6 +6,7 @@ import org.trip.top.demo.bouwsteen.Bouwsteen;
 import org.trip.top.demo.services.ApiService;
 import org.trip.top.demo.services.KaartenService;
 import org.trip.top.demo.services.RestaurantService;
+import org.trip.top.demo.MockBouwsteenRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +14,12 @@ import java.util.List;
 @Service
 public class BouwsteenService {
     private final List<ApiService> apiServices;
+    private final MockBouwsteenRepository mockBouwsteenRepository;
 
     @Autowired
-    public BouwsteenService(List<ApiService> apiServices) {
+    public BouwsteenService(List<ApiService> apiServices, MockBouwsteenRepository mockBouwsteenRepository) {
         this.apiServices = apiServices;
+        this.mockBouwsteenRepository = mockBouwsteenRepository
     }
 
 
@@ -32,7 +35,8 @@ public class BouwsteenService {
         return bouwstenen;
     }
 
-    public List<Bouwsteen> getRouteNaarBouwsteen(Bouwsteen bouwsteen) {
+    public List<Bouwsteen> getRouteNaarBouwsteen(int id) {
+        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id);
         List<Bouwsteen> bouwstenen = new ArrayList<>();
 
         for (ApiService service : apiServices){
@@ -44,4 +48,41 @@ public class BouwsteenService {
 
         return bouwstenen;
     }
+
+    public String planBouwsteen(int id){
+        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id).plan();
+        mockBouwsteenRepository.saveBouwsteen(bouwsteen);
+        return getStatus(id);
+    }
+
+    public String pasBouwsteenAan(int id){
+        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id).pasAan();
+        mockBouwsteenRepository.saveBouwsteen(bouwsteen);
+        return getStatus(id);
+    }
+
+    public String regelBouwsteen(int id){
+        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id).regel();
+        mockBouwsteenRepository.saveBouwsteen(bouwsteen);
+        return getStatus(id);
+    }
+
+    public String betaalBouwsteen(int id){
+        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id).betaal();
+        mockBouwsteenRepository.saveBouwsteen(bouwsteen);
+        return getStatus(id);
+    }
+
+    public String voerBouwsteenUit(int id){
+        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id).voerUit();
+        mockBouwsteenRepository.saveBouwsteen(bouwsteen);
+        return getStatus(id);
+    }
+
+    public String annuleerBouwsteen(int id){
+        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id).annuleer();
+        mockBouwsteenRepository.saveBouwsteen(bouwsteen);
+        return getStatus(id);
+    }
+
 }
