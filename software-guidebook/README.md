@@ -11,7 +11,7 @@ Dit software guidebook geeft een overzicht van de Triptop-applicatie. Het bevat 
 
 Het context diagram ziet er als volgt uit:
 
-![Context diagram](../opdracht-diagrammen/Context%20diagram.png)
+![Context diagram](./images/Triptop_System_Context_Diagram.png)
 
 De gebruiker is een reiziger die een reis wil plannen en boeken. Met de Triptop applicatie kan de reiziger dit doen.
 Triptop gebruikt externe API's om informatie over de bouwstenen op te halen.
@@ -77,7 +77,7 @@ De TripTop applicatie moet geschreven worden in Java met Spring Boot. Dit is nod
 
 ###     7.1. Containers
 Het statische container diagram staat hieronder.
-![Statisch container diagram](../opdracht-diagrammen/Static%20container%20diagram.png)  
+![Statisch container diagram](./images/container_diagrams/Triptop_System_Static_Container_Diagram.png)  
 De reiziger bezoekt de website, deze communiceert met de Identity Provider bij het inloggen.
 Als de reiziger al ingelogd is en andere acties doet, controleert de backend dat de token klopt.
 De backend vraagt informatie op van de externe API's en geeft deze terug naar de webapplicatie.
@@ -86,12 +86,12 @@ De database slaat de planning van een reis op.
 In de volgende stukken worden de dynamische container diagrammen weergegeven voor bij het inloggen en het boeken van een reis.
 
 #### 7.1.1 Inloggen
-![Dynamisch diagram inloggen](../opdracht-diagrammen/Dynamisch%20container%20diagram%20inloggen.png)
+![Dynamisch diagram inloggen](./images/container_diagrams/Triptop_System_Dynamic_Inloggen_Container_Diagram.png)
 
 De reiziger logt in op de website met de inloggegevens. De webapplciatie stuurt die door naar de Identity Provider en deze geeft een token terug.
 
 #### 7.1.2 Reis boeken
-![Dynamisch diagram reis boeken](../opdracht-diagrammen/Dynamisch%20container%20diagram%20reis%20boeken.png)  
+![Dynamisch diagram reis boeken](./images/container_diagrams/Triptop_System_Dynamic_Reis_Boeken_Container_Diagram.png)  
 De reiziger voegt op de website een bouwsteen toe. Deze bevat informatie van een externe API.
 De web applicatie stuurt een API-request door naar de backend met deze bouwsteen en de token van de reiziger.
 De backend stuurt de token op naar de Identity Provider om deze te laten controleren.
