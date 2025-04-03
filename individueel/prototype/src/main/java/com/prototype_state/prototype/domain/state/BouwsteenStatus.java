@@ -3,7 +3,11 @@ package com.prototype_state.prototype.domain.state;
 
 import com.prototype_state.prototype.domain.Bouwsteen;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public interface BouwsteenStatus {
+
     default void pasAan(Bouwsteen bouwsteen) {
         throw new IllegalStateActionException(String.format("Bouwsteen met status %s mag niet aangepast worden", getStatusName()));
     }
