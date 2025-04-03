@@ -139,6 +139,13 @@ De backend heeft zijn eigen RequestInterceptor en Auth componenten die samen van
 
 ![Component diagram api authenticatie en authorizatie](./images/component_diagrams/onterwerpvraag/Triptop_Api_Authenticatie_Authorizatie_Component_Diagram.png)
 
+#### Bouwsteen toestanden
+
+Hieronder staat het component diagram voor de ontwerpvraag "Hoe kunnen we ervoor zorgen dat een bouwsteen alleen bepaalde acties toestaat wanneer deze zich in een specifieke toestand bevindt?".
+Alle logica die ervoor zorgt dat alleen bepaalde acties kunnen worden gedaan als de bouwsteen zich in een bepaalde status bevind
+wordt gedaan in het service component. Om de bouwstenen op te halen of de veranderde Bouwstenen op te slaan gebruikt de BouwsteenService de BouwsteenRepository.
+
+![Component diagram api authenticatie en authorizatie](./images/component_diagrams/onterwerpvraag/TripTop_State_component_Diagram.png)
 
 ###     7.3. Design & Code
 In de volgende subhoofdstukken worden de drie design patterns voor de ontwerpvragen besproken.
