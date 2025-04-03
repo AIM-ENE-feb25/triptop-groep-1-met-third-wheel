@@ -19,9 +19,9 @@ Container(api_gateway, API Gateway, Java Spring Boot, Authenticeerd en authorize
 Container_Ext(id_provider, "Identity Provider", WireMock, "<<Extern Systeem>>\nAuthenticeert gebruikers en geeft token terug")
 
 Rel_R(loginComponent, id_provider, "Verstuurt inlog verzoek", "HTTP/JSON")
-Rel(reisplannerComponent, api_gateway, "Calls Reisplanner API", "HTTP/JSON")
+Rel(reisplannerComponent, api_gateway, "Vraagt informatie op van Reisplanner API", "HTTP/JSON")
 Rel_R(reisplannerComponent, bouwstenenLijstComponent, "Heeft")
-Rel(bouwstenenLijstComponent, api_gateway, "Calls Reisplanner API", "HTTP/JSON")
+Rel(bouwstenenLijstComponent, api_gateway, "Vraagt informatie op van Reisplanner API", "HTTP/JSON")
 
 
 SHOW_LEGEND()

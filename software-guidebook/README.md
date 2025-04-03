@@ -122,7 +122,7 @@ Het componentdiagram over nieuwe bouwstenen toevoegen staat hieronder. De Bouwst
 makkelijk is om nog een toe te voegen, zolang deze van het type APIService is. De API-service heeft verschillende componenten, de API's. 
 Deze maken contact met de externe API's. De gevonden bouwstenen kunnen ook nog opgeslagen worden in de mongoDB Database via de BouwsteenRepository
 
-![Component diagram nieuwe bouwstenen toevoegen](./images/component_diagrams/onterwerpvraag/Triptop_Extra_Bouwstenen_Component_Diagram.png)
+![Component diagram nieuwe bouwstenen toevoegen](./images/component_diagrams/onterwerpvraag/Triptop_Nieuwe_Bouwstenen_Component_Diagram.png)
 
 #### Api authenticatie en authorizatie
 
@@ -167,6 +167,26 @@ De uiteindelijke methode waarmee de API-call wordt gemaakt, ligt drie lagen diep
 Ook wordt er bijvoorbeeld in het klassendiagram gebruik gemaakt van verschillende abstracte klassen die vaak er alleen zijn vanwege de naam en niet veel implementatie hebben.
 
 ![Sequence diagrammen voor facade](./images/sequence_diagrams/Triptop_Api_Services_Sequence_Diagram.png)
+
+#### Strategy en factory voor api auth
+
+Voor het authenticeren en authorizeren van alle requests naar de API is ervoor gekozen om de Strategy en Factory patterns in combinatie te gebruiken.
+Hiervoor is gekozen omdat er op deze manier gemakkelijk een nieuwe authenticatie service toegevoegd kan worden.
+Ook kan de frontend dan doorgeven welke authenticatie service gebruikt moet worden.
+
+In het volgende klassendiagram is te zien hoe de twee patterns gebruikt worden. 
+De InboundRequestFilter gebruikt de AuthStrategyFactory om een AuthStrategy te maken.
+AuthStrategy is een abstracte klasse met een abstracte methode `authenticate` die geimplementeerd wordt door specifieke AuthStrategies zoals bijvoord GoogleAuthStrategy.
+In de specifieke AuthStrategies wordt de methode `authenticate` geimplementeerd.
+
+![KLasse diagram api authenticatie en authorizatie](./images/class_diagrams/Triptop_Api_Gateway_Request_Interceptor_Class_Diagram.png)
+
+In het sequentie diagram hieronder is te zien hoe de API Gateway te werk gaat.
+De API Gateway krijgt een willekeurige HTTP Request en haalt als eerste alle headers uit de request. 
+Dan authenticeerd het de request door de headers mee te geven aan de authenticate methode.
+Indien de request geauthenticeerd is wordt de request doorverstuurd naar de backend. 
+Anders wordt er een 401 Unauthorized response teruggestuurd.
+![Sequence diagram api authenticatie en authorizatie](./images/sequence_diagrams/Triptop_Api_Gateway_Request_Interceptor_Sequence_Diagram.png)
 
 ## 8. Architectural Decision Records
 
@@ -608,6 +628,9 @@ De volgende software is vereist:
 
 Om de applicatie te runnen moet je het volgende doen:
 - Start de API Gateway door de `Main` klasse te runnen
-- Start de backend door de `SpringBootApplication` klasse te runnen
-- Stuur API requests naar `http://localhost:8000` op een van de volgende endpooints:
-  - `/api/bouwsteen`
+- Start de backend door de `DemoApplication` klasse te runnen
+- Run de mock ID provider door de `DemoApplication` klasse te runnen
+- Importeer de [postman collectie](../prototype/Prototype.postman_collection) in PostMan
+- Voer de requests uit
+  - Om te testen dat de API gateway werkt kan je in de pre-request scripts van de collectie een van de headers veranderen.
+  - Ook kan je de url variabele veranderen naar http://localhost:8080 om te zien dat de requests hetzelfde resultaat opleveren.

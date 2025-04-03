@@ -41,7 +41,7 @@ googleAuthStrategyNote ..left GoogleAuthStrategy
 
 InboundRequestFilter -up-^ GlobalFilter
 InboundRequestFilter -up-^ PriorityOrdered
-InboundRequestFilter --right> "- authStrategyFactory" AuthStrategyFactory
+InboundRequestFilter --> "- authStrategyFactory" AuthStrategyFactory
 
 AuthStrategyFactory ..> AuthStrategy : <<creates>>
 InboundRequestFilter ..> AuthStrategy : <<uses>>

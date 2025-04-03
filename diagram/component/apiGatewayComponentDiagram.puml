@@ -47,14 +47,14 @@ Boundary(api_gateway, "Triptop", "ApiGateway Systeem") {
     Rel_R(api_auth, api_cache, Leest/Schrijft)
 }
 
-D_Rel(api_auth, id_provider, "Controleert of gebruiker geauthenticeerd is")
+D_Rel(api_auth, id_provider, "Controleert of gebruiker geauthenticeerd is", HTTP/JSON)
 Lay_R(api_cache, id_provider)
 
 Rel_D(frontend, api_request_interceptor, Verstuurt API request naar, HTTP/JSON)
 
 Container(backend, "Backend", "Java Spring Boot", "Behandelt API-requests, zorgt dat data opgeslagen wordt en geeft de benodigde data terug of door naar andere API's")
 
-D_Rel_D(api_request_interceptor, backend, Verstuurt geauthorizeerde verzoeken door)
+D_Rel_D(api_request_interceptor, backend, Verstuurt geauthorizeerde verzoeken door, HTTP/JSON)
 
 
 SHOW_LEGEND()
