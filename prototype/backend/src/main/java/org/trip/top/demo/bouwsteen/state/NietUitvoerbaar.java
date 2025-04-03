@@ -10,7 +10,7 @@ public class NietUitvoerbaar implements BouwsteenStatus {
     }
 
     @Override
-    public Bouwsteen voerUit(Bouwsteen bouwsteen) {
+    public void voerUit(Bouwsteen bouwsteen) {
         throw new IllegalStateActionException(String.format("Bouwsteen is niet uitvoerbaar vanwege: %s", reden));
     }
 }

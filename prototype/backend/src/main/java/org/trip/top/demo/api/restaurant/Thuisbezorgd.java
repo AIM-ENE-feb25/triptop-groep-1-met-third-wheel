@@ -14,7 +14,9 @@ public class Thuisbezorgd extends RestaurantAPI {
     }
     @Override
     public RestaurantBouwsteen voerAPICallUit(String value) {
-        return new RestaurantBouwsteen("De halve maan",
+        return new RestaurantBouwsteen(
+                2,
+                "De halve maan",
                 "test.nl",
                 "Restaurant in Amsterdam",
                 kaartenService.getCoordinaten("Amsterdam"));
