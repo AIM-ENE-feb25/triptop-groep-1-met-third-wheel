@@ -1,25 +1,33 @@
 @startuml
 title Triptop Api Gateway Sequence
 
+autonumber
+
 participant "Client" as client
 participant "InboundRequestFilter" as filter
+participant "ServerWebExchange" as exchange
+participant "ServerHttpRequest" as request
 participant "AuthStrategyFactory" as factory
-participant "AuthStrategy" as strategy
 
-client -> filter: HTTP Request
+client -> filter: exchange
 
-filter -> factory: authStrategy = getStrategy(strategyType)
+filter -> exchange: request = getRequest()
 
-filter -> filter: headers = getHeader(httpRequest)
+filter -> request: parameterMap = getHeaders().toSingleValueMap()
 
-filter -> strategy: isAuthenticated = authenticate(headers)
+filter -> factory: getStrategy(parameterMap.get("auth-type"))
+
+create participant "AuthStrategy" as strategy
+factory -> strategy: authStrategy = new AuthStrategy()
+
+factory --> filter: return authStrategy 
+
+filter -> strategy: isAuthenticated = authenticate(parameterMap)
 
 alt isAuthenticated == true
     filter --> Backend: forward request
 else
     filter --> client: return 401 Unauthorized
 end
-
-deactivate filter
 
 @enduml

@@ -49,21 +49,21 @@ Boundary(api_gateway, "Triptop", "ApiGateway Systeem") {
     Rel_R(api_auth, api_cache, Leest/Schrijft)
 }
 
-D_Rel(api_auth, id_provider, "Controleert of gebruiker geauthenticeerd is")
+D_Rel(api_auth, id_provider, "Controleert of gebruiker geauthenticeerd is", HTTP/JSON)
 Lay_R(api_cache, id_provider)
 
 Rel_D(frontend, api_request_interceptor, Verstuurt API request naar, HTTP/JSON)
 
 Boundary(backend, "Triptop", "Backend Systeem") {
     Component(backend_request_interceptor, RequestInterceptor, Spring Boot Component, Onderschept alle requests naar de backend en staat deze alleen toe als die geauthentizeerd is)
-    Component(backend_controller, BouwsteenController, Spring MVC Controller, Handles API requests)
+    Component(backend_controller, BouwsteenController, Spring MVC Controller, Verwerkt API requests)
     Component(backend_auth, Auth, Spring Boot Component, Controleert of de request de token gemaakt in de ApiGateway heeft.)
 
     Rel_R(backend_request_interceptor, backend_auth, Authentizeerd requests met)
     D_Rel_D(backend_request_interceptor, backend_controller, Verstuurt geauthentizeerde verzoeken door)
 }
 
-D_Rel_D(api_request_interceptor, backend_request_interceptor, Verstuurt geauthentizeerde verzoeken door)
+D_Rel_D(api_request_interceptor, backend_request_interceptor, Verstuurt geauthentizeerde verzoeken door, HTTP/JSON)
 
 
 SHOW_LEGEND()

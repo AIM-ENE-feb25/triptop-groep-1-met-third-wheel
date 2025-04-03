@@ -108,7 +108,7 @@ Het componentdiagram over nieuwe bouwstenen toevoegen staat hieronder. De Bouwst
 makkelijk is om nog een toe te voegen, zolang deze van het type APIService is. De API-service heeft verschillende componenten, de API's. 
 Deze maken contact met de externe API's. De gevonden bouwstenen kunnen ook nog opgeslagen worden in de mongoDB Database via de BouwsteenRepository
 
-![Component diagram nieuwe bouwstenen toevoegen](./images/component_diagrams/onterwerpvraag/Triptop_Extra_Bouwstenen_Component_Diagram.png)
+![Component diagram nieuwe bouwstenen toevoegen](./images/component_diagrams/onterwerpvraag/Triptop_Nieuwe_Bouwstenen_Component_Diagram.png)
 
 #### Api authenticatie en authorizatie
 
@@ -139,6 +139,8 @@ In het volgende diagram is een klassendiagram te zien waarbij de BouwsteenServic
 In het prototype is er niet gebruik gemaakt van het opslaan van de lijst met bouwstenen in een database, maar deze uitbreiding kan zeker nog 
 gemaakt worden. In dit prototype worden Restaurants opgehaald. Dit is een voorbeeld maar dit kunnen verschillende diensten zijn.
 
+![Klasse diagram nieuwe bouwstenen](./images/class_diagrams/Triptop_Nieuwe_Bouwstenen_Toevoegen_Class_Diagram.png)
+
 De RestaurantService heeft een lijst met verschillende restaurantAPI's, deze hebben van de abstracte klasse API een methode genaamd voerAPICallUit().
 Deze klasse maakt gebruik van generics omdat het type bouwsteen wat eruitkomt, nog niet bekend is in eerste instantie.
 De informatie uit de API's zijn gemockt omdat het niet relevant was om dit te koppelen aan een echte API. 
@@ -150,6 +152,28 @@ maar dit zou in een waarde die vanuit de frontend meegegeven kan worden, zijn.
 Nadeel van deze facade, wat ook in de bijbehorende ADR besproken wordt, is dat de code moeilijker te begrijpen is.
 De uiteindelijke methode waarmee de API-call wordt gemaakt, ligt drie lagen diep (zie het sequentiediagram hieronder). 
 Ook wordt er bijvoorbeeld in het klassendiagram gebruik gemaakt van verschillende abstracte klassen die vaak er alleen zijn vanwege de naam en niet veel implementatie hebben.
+
+![Sequence diagram restaurants ophalen](./images/sequence_diagrams/Triptop_Restaurant_Api_Sequence_Diagram.png)
+
+#### Strategy en factory voor api auth
+
+Voor het authenticeren en authorizeren van alle requests naar de API is ervoor gekozen om de Strategy en Factory patterns in combinatie te gebruiken.
+Hiervoor is gekozen omdat er op deze manier gemakkelijk een nieuwe authenticatie service toegevoegd kan worden.
+Ook kan de frontend dan doorgeven welke authenticatie service gebruikt moet worden.
+
+In het volgende klassendiagram is te zien hoe de twee patterns gebruikt worden. 
+De InboundRequestFilter gebruikt de AuthStrategyFactory om een AuthStrategy te maken.
+AuthStrategy is een abstracte klasse met een abstracte methode `authenticate` die geimplementeerd wordt door specifieke AuthStrategies zoals bijvoord GoogleAuthStrategy.
+In de specifieke AuthStrategies wordt de methode `authenticate` geimplementeerd.
+
+![KLasse diagram api authenticatie en authorizatie](./images/class_diagrams/Triptop_Api_Gateway_Request_Interceptor_Class_Diagram.png)
+
+In het sequentie diagram hieronder is te zien hoe de API Gateway te werk gaat.
+De API Gateway krijgt een willekeurige HTTP Request en haalt als eerste alle headers uit de request. 
+Dan authenticeerd het de request door de headers mee te geven aan de authenticate methode.
+Indien de request geauthenticeerd is wordt de request doorverstuurd naar de backend. 
+Anders wordt er een 401 Unauthorized response teruggestuurd.
+![Sequence diagram api authenticatie en authorizatie](./images/sequence_diagrams/Triptop_Api_Gateway_Request_Interceptor_Sequence_Diagram.png)
 
 ## 8. Architectural Decision Records
 
