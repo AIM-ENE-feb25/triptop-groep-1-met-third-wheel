@@ -43,13 +43,15 @@ Boundary(backend, "Triptop", "Backend Systeem") {
     Component(backend_controller, BouwsteenController, Spring MVC Controller, Handles API requests)
     Component(backend_service, BouwsteenService, Spring Boot Service, Bevat logica om acties met de bouwstenen te ondernemen als ze in een bepaalde staat zijn)
     Component(backend_repository, BouwsteenRepository, Spring Boot Repository, Bevat logica om bouwstenen op te halen en op te slaan)
-    Component(backend_api_service, "(Bouwsteen)Service", "Spring Boot Service", "Haalt data uit de API om deze te verwerken")
+    Component(backend_api_service, "ApiService", "Spring Boot Service", "Haalt data uit de API om deze te verwerken")
+    Component(backend_api, "API", "Spring Boot Component", "Verstuurt API-verzoeken naar externe API's")
 
     Rel_R(backend_request_interceptor, backend_auth, Authorizeerd requests met)
     D_Rel_D(backend_request_interceptor, backend_controller, Verstuurt geauthorizeerde verzoeken door)
     Rel_D(backend_controller, backend_service, gebruikt)
     D_Rel_D(backend_service, backend_repository, gebruikt)
     Rel_R(backend_service, backend_api_service, gebruikt)
+    Rel_D(backend_api_service, backend_api, gebruikt)
 }
 
 Rel_D(api_gateway, backend_request_interceptor, Stuurt request door, HTTP/JSON)
@@ -58,7 +60,7 @@ ContainerDb(db, Database, MongoDb, Slaat bouwstenen op)
 Rel_D(backend_repository, db, Leest en schrijft data, MongoDB Wire Protocol)
 
 Container_Ext(api, "Externe API", "Verschillende API's", "Bevat informatie over bouwsteen")
-Rel_R(backend_api_service, api, stuurt API-verzoek, HTTP/JSON)
+Rel_R(backend_api, api, stuurt API-verzoek, HTTP/JSON)
 
 
 
