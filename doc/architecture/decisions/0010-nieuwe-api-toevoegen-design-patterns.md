@@ -1,4 +1,4 @@
-# 10. nieuwe api toevoegen design patterns
+# 10. Design pattern voor toevoegen API's
 
 Date: 2025-03-31
 
@@ -14,17 +14,18 @@ design pattern is voor deze ontwerp vraag.
 
 ## Options
 
-| Forces                               | Ja | nee |
-|--------------------------------------|----|-----|
-| Volgt Dependency Inversion Principle | ++ | --- |
-| Volgt Single Responsibilty Principle | ++ | --  |
+| Forces                                      | Ja | nee |
+|---------------------------------------------|----|-----|
+| Volgt Dependency Inversion Principle        | ++ | --  |
+| Volgt Single Responsibilty Principle        | ++ | --  |
+| Makkelijk uit te breiden met meerdere API's | ++ | -   |
 
 ## Decision
 
-We gaan gebruik maken van dit design pattern, in het prototype is de facade op de KaartenService. Die verbergt dat er
-een API call gedaan wordt om het adres te krijgen vanuit de coordinaten.
+We gaan gebruik maken van dit design pattern, in het prototype is de facade op de KaartenService en de RestaurantService. Die verbergt dat er
+een API call gedaan wordt om informatie uit de API's te krijgen..
 
 ## Consequences
 
-Het is makkelijker om te wisselen tussen coordinaten en adressen.
-Je moet door meer lagen stappen om de code te begrijpen.
+- Het is makkelijker om te wisselen tussen coordinaten en adressen.
+- Je moet door meer lagen stappen om de code te begrijpen.

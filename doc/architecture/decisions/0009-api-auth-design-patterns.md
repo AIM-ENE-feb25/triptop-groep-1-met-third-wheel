@@ -1,4 +1,4 @@
-# 9. api auth design patterns
+# 9. Strategy design pattern voor authenticatie
 
 Date: 2025-03-31
 
@@ -9,7 +9,6 @@ Accepted
 ## Context
 
 In het prototype is gebruik gemaakt van de Strategy en Factory Method patterns.
-
 In code ziet het er als volgt uit:
 
 ```java
@@ -63,11 +62,11 @@ public abstract class AuthStrategy {
 ## Decision
 
 Dit werkt goed en staat gemakkelijk toe om nieuwe authenticatie strategien toe te voegen. Ook kan de frontend bepalen
-welke strategy gebruikt moet worden, de frontend weet dit omdat het inloggen met de Identity Provider direct vanaf de
+welke strategy gebruikt moet worden. De frontend weet dit omdat het inloggen met de Identity Provider direct vanaf de
 frontend gebeurt.
 
 ## Consequences
 
-Het is makkelijk om nieuwe inlog mogelijkheden toe te voegen.
-Er moet altijd een inlog strategy gebruikt worden.
+Het is makkelijk om nieuwe inlog-mogelijkheden toe te voegen.
+Er moet altijd een inlog-strategy gebruikt worden.
 Er moet samengewerkt worden vanuit de frontend en backend voor de namen van de headers.

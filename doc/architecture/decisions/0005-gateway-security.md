@@ -4,7 +4,7 @@ Date: 2025-03-27
 
 ## Status
 
-Proposed
+Accepted
 
 Superceded by [8. Use Spring Cloud Gateway for gateway](0008-use-spring-cloud-gateway-for-gateway.md)
 
