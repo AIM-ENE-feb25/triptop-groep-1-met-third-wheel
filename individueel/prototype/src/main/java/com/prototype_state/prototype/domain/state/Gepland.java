@@ -10,7 +10,6 @@ public class Gepland implements BouwsteenStatus {
 
     @Override
     public void regel(Bouwsteen bouwsteen) {
-        var statusUpdate = "Bouwsteen wordt geregeld";
         bouwsteen.setStatus(new Geregeld());
     }
 }

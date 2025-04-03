@@ -19,9 +19,8 @@ public class Bouwsteen {
     }
 
     public String setStatus(BouwsteenStatus newStatus) {
-        var statusUpdate = "Status veranderd naar: " + newStatus.getStatusName();
         this.status = newStatus;
-        return statusUpdate;
+        return "Status veranderd naar: " + newStatus.getStatusName();
     }
     public void plan() {
         setStatus(new Gepland());

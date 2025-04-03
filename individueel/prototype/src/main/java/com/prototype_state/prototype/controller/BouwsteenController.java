@@ -53,7 +53,7 @@ class BouwsteenController {
 
     @GetMapping("/{id}/status")
     public String getStatus(@PathVariable int id) {
-        return "Huidige status: " + getBouwsteen(id).getStatus();
+        return "Huidige status: " + getBouwsteen(id).getStatus().getStatusName();
     }
 
     private Bouwsteen getBouwsteen(int id) {
