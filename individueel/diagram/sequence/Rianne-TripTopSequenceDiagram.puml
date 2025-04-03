@@ -1,5 +1,6 @@
 @startuml
 title TripTop Restaurant API Sequence
+autonumber
 actor Gebruiker
 participant "BouwsteenController : bouwsteenController" as controller
 participant "BouwsteenService : bouwsteenService" as service
