@@ -98,9 +98,23 @@ De backend stuurt de token op naar de Identity Provider om deze te laten control
 Bij goedkeuring wordt de bouwsteen opgeslagen in de database.
 
 ###     7.2. Components
+Het systeem bestaat uit drie containers: de frontend, backend en de api gateway.
 
-> [!IMPORTANT]
-> Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
+De frontend bestaat uit een reisplanner component en een login-component.
+Het login-component stuurt een inlog-verzoek naar de Identity Provider met alle inloggegevens.
+De reisplanner heeft nog een aparte lijst met bouwstenen. Beiden maken contact met de API-Gateway om informatie op te vragen
+![Frontend component diagram](./images/component_diagrams/Triptop_Frontend_Component_Diagram.png)
+
+De API-gateway bestaat uit een requestInterceptor, een Auth-component en een cache.
+De requestIntercepter stuurt een API-request van de frontend door naar het Auth-component die kijkt in de cache of de tokens al bekend zijn.
+Anders wordt de token via de Identity Provider gecontroleerd. Als dit allemaal klopt, wordt het api-call doorgestuurd naar de backend.
+![API gateway diagram](./images/component_diagrams/Triptop_Api_Gateway_Component_Diagram.png)
+
+In de backend wordt er opnieuw in een Auth-component gekeken of een token aanwezig is. Dit om te kijken of de API-request vanuit de API-gateway komt.
+Daarna wordt het doorgestuurd naar de controller. Die roept een methode aan in de service, waarbij de service die doorstuurt naar een repository als het nodig is. 
+![Backend component diagram](./images/component_diagrams/Triptop_Backend_Component_Diagram.png)
+
+In de komende subhoofdstukken staan de componentdiagrammen voor de individuele ontwerpvragen.
 
 #### Nieuwe bouwstenen toevoegen
 
@@ -139,8 +153,7 @@ In het volgende diagram is een klassendiagram te zien waarbij de BouwsteenServic
 In het prototype is er niet gebruik gemaakt van het opslaan van de lijst met bouwstenen in een database, maar deze uitbreiding kan zeker nog 
 gemaakt worden. In dit prototype worden Restaurants opgehaald. Dit is een voorbeeld maar dit kunnen verschillende diensten zijn.
 
-![Klasse diagram nieuwe bouwstenen](./images/class_diagrams/Triptop_Nieuwe_Bouwstenen_Toevoegen_Class_Diagram.png)
-
+![Klassendiagram voor facade](./images/class_diagrams/Triptop_Api_Services_Class_Diagram.png)
 De RestaurantService heeft een lijst met verschillende restaurantAPI's, deze hebben van de abstracte klasse API een methode genaamd voerAPICallUit().
 Deze klasse maakt gebruik van generics omdat het type bouwsteen wat eruitkomt, nog niet bekend is in eerste instantie.
 De informatie uit de API's zijn gemockt omdat het niet relevant was om dit te koppelen aan een echte API. 
@@ -153,7 +166,7 @@ Nadeel van deze facade, wat ook in de bijbehorende ADR besproken wordt, is dat d
 De uiteindelijke methode waarmee de API-call wordt gemaakt, ligt drie lagen diep (zie het sequentiediagram hieronder). 
 Ook wordt er bijvoorbeeld in het klassendiagram gebruik gemaakt van verschillende abstracte klassen die vaak er alleen zijn vanwege de naam en niet veel implementatie hebben.
 
-![Sequence diagram restaurants ophalen](./images/sequence_diagrams/Triptop_Restaurant_Api_Sequence_Diagram.png)
+![Sequence diagrammen voor facade](./images/sequence_diagrams/Triptop_Api_Services_Sequence_Diagram.png)
 
 #### Strategy en factory voor api auth
 
