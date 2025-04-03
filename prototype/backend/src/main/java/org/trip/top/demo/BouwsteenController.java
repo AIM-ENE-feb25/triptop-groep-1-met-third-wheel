@@ -61,6 +61,10 @@ public class BouwsteenController {
 
     @GetMapping("/{id}/status")
     public String getStatus(@PathVariable int id) {
-        return "Huidige status: " + mockBouwsteenRepository.getBouwsteenById(id).getStatus().getStatusName();
+        if(mockBouwsteenRepository.getBouwsteenById(id).getStatus() == null) {
+            return "Huidige status: " + mockBouwsteenRepository.getBouwsteenById(id).getStatus();
+        }else{
+            return "Huidige status: " + mockBouwsteenRepository.getBouwsteenById(id).getStatus().getStatusName();
+        }
     }
 }
