@@ -3,8 +3,11 @@ title Triptop Class Diagram
 
 class BouwsteenService{
   +getAlleRestaurantsOpLocatie(location : String) : List<Bouwsteen>
+  +getRouteNaarBouwsteen(bouwsteen : Bouwsteen)
 }
 
+class BouwsteenRepository {
+}
 abstract class Bouwsteen {
     - naam : String
     - type : String
@@ -32,6 +35,11 @@ abstract class API <T> {
 
 abstract class APIMetLocatie < T >
 
+class BouwsteenController {
+    +getAlleRestaurants(locatie : String)
+    +getRouteBouwsteen(id: int)
+}
+
 class UberEats
 class Thuisbezorgd
 class GoogleMapsPlaces
@@ -53,4 +61,5 @@ API ^-- TrueWayDirection
 API ^-- GoogleMapsPlaces
 KaartenService -->"- trueWayDirection" TrueWayDirection
 KaartenService ->"- googleMapsPlaces" GoogleMapsPlaces
+BouwsteenService --> "- bouwsteenRepository" BouwsteenRepository
 @enduml

@@ -457,7 +457,7 @@ In code ziet het er als volgt uit:
 ```java
 AuthStrategy authStrategy = authStrategyFactory.getStrategy(parameterMap.get("auth-type"));
 boolean isAuthenticated = false;
-isAuthenticated =authStrategy.
+isAuthenticated = authStrategy;
 
 authenticate(parameterMap);
 ```
