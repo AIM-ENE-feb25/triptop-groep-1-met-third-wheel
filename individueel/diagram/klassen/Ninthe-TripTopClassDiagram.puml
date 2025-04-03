@@ -1,0 +1,41 @@
+@startuml
+title Triptop Class Diagram
+class BouwsteenService{
+   + findById(bouwsteenId)
+   + voerUit(actie)
+   + updateBouwsteen(bouwsteen)
+}
+
+class Bouwsteen {
+    # naam : String
+    # id : int
+}
+
+abstract class BouwsteenStatus {
+- bouwsteen: Bouwsteen
+ + pasAan(): void
+ + regel(): void
+ + betaal(): void
+ + voerUit(): void
+ + annuleer(): void
+ + getStatusName(): string
+}
+
+class Gepland
+class Geregeld
+class Betaald
+class NietUitvoerbaar
+class Uitgevoerd
+
+class APIBouwsteen
+note left: Per API een andere klasse en andere extra inhoud
+
+Bouwsteen --> " # bouwsteenStatus"BouwsteenStatus
+BouwsteenService --> " - bouwsteen" Bouwsteen
+Bouwsteen ^-- APIBouwsteen
+BouwsteenStatus ^-- Gepland
+BouwsteenStatus ^-- Geregeld
+BouwsteenStatus ^-- Betaald
+BouwsteenStatus ^-- NietUitvoerbaar
+BouwsteenStatus ^-- Uitgevoerd
+@enduml
