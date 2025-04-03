@@ -50,39 +50,53 @@ public class BouwsteenService {
     }
 
     public String planBouwsteen(int id){
-        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id).plan();
+        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id);
+        bouwsteen.plan();
         mockBouwsteenRepository.saveBouwsteen(bouwsteen);
         return getStatus(id);
     }
 
     public String pasBouwsteenAan(int id){
-        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id).pasAan();
+        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id;
+        bouwsteen).pasAan();
         mockBouwsteenRepository.saveBouwsteen(bouwsteen);
         return getStatus(id);
     }
 
     public String regelBouwsteen(int id){
-        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id).regel();
+        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id);
+        bouwsteen.regel();
         mockBouwsteenRepository.saveBouwsteen(bouwsteen);
         return getStatus(id);
     }
 
     public String betaalBouwsteen(int id){
-        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id).betaal();
+        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id);
+        bouwsteen.betaal();
         mockBouwsteenRepository.saveBouwsteen(bouwsteen);
         return getStatus(id);
     }
 
     public String voerBouwsteenUit(int id){
-        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id).voerUit();
+        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id);
+        bouwsteen.voerUit();
         mockBouwsteenRepository.saveBouwsteen(bouwsteen);
         return getStatus(id);
     }
 
     public String annuleerBouwsteen(int id){
-        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id).annuleer();
+        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id);
+        bouwsteen.annuleer();
         mockBouwsteenRepository.saveBouwsteen(bouwsteen);
         return getStatus(id);
+    }
+
+    public String getStatus(int id) {
+        if(mockBouwsteenRepository.getBouwsteenById(id).getStatus() == null) {
+            return "Huidige status: " + mockBouwsteenRepository.getBouwsteenById(id).getStatus();
+        }else{
+            return "Huidige status: " + mockBouwsteenRepository.getBouwsteenById(id).getStatus().getStatusName();
+        }
     }
 
 }
