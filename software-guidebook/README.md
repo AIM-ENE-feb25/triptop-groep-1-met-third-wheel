@@ -210,34 +210,32 @@ Anders wordt er een 401 Unauthorized response teruggestuurd.
 ![Sequence diagram api authenticatie en authorizatie](./images/sequence_diagrams/Triptop_Api_Gateway_Request_Interceptor_Sequence_Diagram.png)
 
 #### State pattern voor toestanden bijhouden
-Om acties af te handelen afhankelijk van de toestand waarin een Bouwsteen zich bevindt, is
-gekozen voor het State Pattern. Er is hiervoor gekozen, omdat je zo alle code voor de
-toestanden gescheiden kan houden. Ook is het zo gemakkelijk om nieuwe toestanden toe te voegen
-zonder dat je bestaande code hoeft aan te passen.
+Om acties af te handelen afhankelijk van de toestand waarin een Bouwsteen zich bevindt, is gekozen voor het State Pattern. 
+Er is hiervoor gekozen, omdat zo alle code voor de toestanden gescheiden gehouden kan worden. 
+Ook is het zo gemakkelijk om nieuwe toestanden toe te voegen zonder dat bestaande code aangepast hoeft te worden.
 
 In het onderstaande klassendiagram is te zien hoe het State Pattern is toegepast.
 Een Bouwsteen heeft een BouwsteenStatus, waarin standaardmethodes zijn gedefinieerd.
-De klassen Gepland, Geregeld, Betaald, NietUitvoerbaar en Uitgevoerd implementeren de interface
-BouwsteenStatus. Dit zijn de mogelijke toestanden die een Bouwsteen kan hebben.
-Als een toestand specifiek gedrag heeft voor een bepaalde actie, wordt de bijbehorende
-methode in de klasse overschreven.
+De klassen Gepland, Geregeld, Betaald, NietUitvoerbaar en Uitgevoerd implementeren de interface BouwsteenStatus. 
+Dit zijn de mogelijke toestanden die een Bouwsteen kan hebben.
+Als een toestand specifiek gedrag heeft voor een bepaalde actie, wordt de bijbehorende methode in de klasse overschreven.
 
 ![klasse diagram state](./images/class_diagrams/Ninthe-TripTop-States-Triptop_Class_Diagram.png)
 
-In het sequentie diagram hieronder staat een voorbeeld van hoe het werkt als je een bouwsteen van status veranderd.
+In het sequentie diagram hieronder staat een voorbeeld van hoe het werkt als een bouwsteen van status verandert.
 De gebruiker wilt de bouwsteen betalen, eerst wordt de juiste bouwsteen opgehaald uit de repository.
-Dan roept hij de methode aan op de bouwsteen, die methode controleer eerst de status van de bouwsteen. 
-Is de status null dan wordt er een 400 Bad request terug gegeven. Is de status niet null kan hij de actie 
-uitvoeren die hoort bij de status die hij nu heeft. In dit geval is de toestand "Geregeld" dus kan hij betalen en 
-dan zet hij de nieuwe status van de bouwsteen met setStatus(). Deze wordt vervolgens weer opgeslagen door de service in de repository
+Dan wordt de methode aan op de bouwsteen aangeroepen, die methode controleert eerst de status van de bouwsteen. 
+Is de status null dan wordt er een 400 Bad request terug gegeven. Is de status niet null dan wordt de actie 
+uitgevoerd die hoort bij de huidige status. In dit geval is de toestand "Geregeld" dus kan er betaald worden en 
+wordt de nieuwe status van de bouwsteen met setStatus() gezet. Deze wordt vervolgens weer opgeslagen door de service in de repository.
 
 ![seguentie diagram toestand veranderen](./images/sequence_diagrams/Triptop_Wijzigen_van_BouwsteenStatus_sequentieDiagram.png)
 
 In onderstaande toestandsdiagram staat de cyclus van een bouwsteen. Het diagram is een rechte lijn je kan dus 
-alleen een state vooruit maar niet meer terug. Wel kan je bouwstenen annuleren, die krijgen dan de status 
-NietUitvoerbaar en kunnen niet meer gepland worden. Er worden excepties gegooid als de actie niet mogelijk 
-is bij de huidige status. Er worden alleen pijlen gebruikt als een actie ook daadwerkelijk de toestand van de Bouwsteen 
-verandert, andere acties die je kan uitvoeren maar niet de status veranderen zijn niet weergegeven.
+alleen een state vooruit maar niet meer terug. Er is een splitsing bij geregeld waar een bouwstenen geannuleerd of betaald kan worden.
+Wanneer de bouwsteen geannuleerd wordt dan wordt de status NietUitvoerbaar en kunnen er geen andere acties uitgevoerd worden op de bouwsteen. 
+Er worden excepties gegooid als de actie niet mogelijk is bij de huidige status. 
+Er worden alleen pijlen gebruikt als een actie ook daadwerkelijk de toestand van de Bouwsteen verandert, andere acties die je kan uitvoeren maar niet de status veranderen zijn niet weergegeven.
 
 ![toesdtandsdiagram_bouwsteen](./images/toestandsDiagram.png)
 
