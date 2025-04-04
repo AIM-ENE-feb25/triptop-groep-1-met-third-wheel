@@ -58,7 +58,12 @@ public abstract class Bouwsteen {
     }
 
     public void plan() {
-        setStatus(new Gepland());
+        if (status == null) {
+            setStatus(new Gepland());
+        }else{
+            throw new IllegalStateActionException(
+                    "Bouwsteen was al gepland");
+        }
     }
 
     private void controleerBouwsteenStatus() {
