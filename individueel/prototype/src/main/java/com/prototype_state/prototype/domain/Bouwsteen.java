@@ -27,7 +27,12 @@ public class Bouwsteen {
         return "Status veranderd naar: " + newStatus.getStatusName();
     }
     public void plan() {
-        setStatus(new Gepland());
+        if (status == null) {
+            setStatus(new Gepland());
+        }else{
+            throw new IllegalStateActionException(
+                    "Bouwsteen was al gepland");
+        }
     }
 
     private void controleerBouwsteenStatus() {
