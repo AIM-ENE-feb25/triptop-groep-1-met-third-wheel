@@ -6,14 +6,14 @@ skinparam classAttributeIconSize 0
 title TripTop ApiGateway RequestInterceptor class diagram
 
 interface GlobalFilter <<interface>> {
-    + filter(ServerWebExchange exchange, GatewayFilterChain chain)
+    + filter(exchange: ServerWebExchange, chain: GatewayFilterChain): void
 }
 note "Komt van Spring Cloud Gateway" as filterNote
 
 filterNote .. GlobalFilter
 
 interface PriorityOrdered <<interface>> {
-    + getOrder()
+    + getOrder(): void
 }
 
 filterNote .. PriorityOrdered
@@ -22,8 +22,8 @@ class InboundRequestFilter {
 }
 
 interface IAuthStrategy <<interface>> {
-    - boolean authenticate(Map<String, String> headers)
-    - String getStrategyName()
+    - authenticate(headers: Map<String, String>): boolean
+    - getStrategyName(): String
 }
 
 class RestTemplate{
@@ -33,7 +33,7 @@ note "Komt van Spring Boot" as restTemplateNote
 restTemplateNote .. RestTemplate
 
 class AuthStrategyFactory {
-    + IAuthStrategy getStrategy(String strategyType)
+    + getStrategy(strategyType: String): IAuthStrategy
 }
 
 abstract class ApiAuthStrategy <<abstract class>> {
