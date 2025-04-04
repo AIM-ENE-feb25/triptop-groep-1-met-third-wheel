@@ -70,17 +70,22 @@ De TripTop applicatie moet geschreven worden in Java met Spring Boot. Dit is nod
 
 
 ## 6. Principles
-> Open/Closed Principle
+### Open/Closed Principle
 
 Dit principe is toegepast zodat er gemakkelijk nieuwe APIs of authenticatie vormen toegevoegd kunnen worden.
 Het is belangrijk om dit principe te volgen omdat dan al bestaande code niet veranderd hoeft te worden om de toevoegingen te kunnen doen.
 
-> Program to an Interface
+### Program to an Interface
 
 Dit principe is toegepast zodat code niet afhankelijk is van concrete implementaties maar van abstracties.
 Het is belangrijk om dit toe te passen zodat er nieuwe implementaties toegevoegd of vervangen kunnen worden.
 
-> Dependency Inversion Principle
+### Dependency Inversion Principle
+
+Dit principe is toegepast zodat de klassen die andere klassen aanroepen bepalen wat de methode, returntypen en parameters zijn.
+In de prototypen is dit terug te zien in de `BouwsteenService` met de lijst van `ApiService`. 
+Door in `ApiService` te bepalen wat de methode is kan de `BouwsteenService` bij alle api services dezelfde methode gebruiken.
+Hierdoor kan er gemakkelijk een nieuwe api service toegevoegd worden zonder dat de `BouwsteenService` aangepast moet worden.
 
 ## 7. Software Architecture
 
