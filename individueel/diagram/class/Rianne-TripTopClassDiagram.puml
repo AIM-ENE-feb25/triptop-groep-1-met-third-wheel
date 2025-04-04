@@ -1,13 +1,6 @@
 @startuml
 title Triptop Class Diagram
 
-class BouwsteenService{
-  +getAlleRestaurantsOpLocatie(location : String) : List<Bouwsteen>
-  +getRouteNaarBouwsteen(id : int)
-}
-
-class BouwsteenRepository {
-}
 abstract class Bouwsteen {
     - naam : String
     - type : String
@@ -19,13 +12,43 @@ abstract class Bouwsteen {
 class Restaurant
 note left: Per dienst een andere klasse en andere extra inhoud
 
+Bouwsteen ^-- Restaurant
+
+
+class BouwsteenController {
+    +getAlleRestaurants(locatie : String)
+    +getRouteBouwsteen(id: int)
+}
+
+class BouwsteenService{
+  +getAlleRestaurantsOpLocatie(location : String) : List<Bouwsteen>
+  +getRouteNaarBouwsteen(id : int)
+}
+BouwsteenController --> "- bouwsteenService" BouwsteenService
+
+
+class BouwsteenRepository {
+}
+
+
+
 interface ApiService{
     getBouwstenen(locatie : String) : List<Bouwsteen>
 }
 
+class RestaurantService
+note left: Per dienst een andere klasse en andere extra inhoud
+
+
+
 class KaartenService{
     +getNaam(location : Location) : String
     +getCoordinaten(location : String) : Locatie
+}
+
+class GoogleMapsPlaces
+class TrueWayDirection{
++ getRouteBeschrijvingen() : List<String>
 }
 
 abstract class API <T, V> {
@@ -35,10 +58,7 @@ abstract class API <T, V> {
 
 abstract class APIMetLocatie < T , V>
 
-class BouwsteenController {
-    +getAlleRestaurants(locatie : String)
-    +getRouteBouwsteen(id: int)
-}
+
 
 abstract class RestaurantAPI <RestaurantBouwsteen,String> {
 }
@@ -47,14 +67,7 @@ note left: Per dienst een andere klasse
 
 class UberEats
 class Thuisbezorgd
-class GoogleMapsPlaces
-class TrueWayDirection{
-+ getRouteBeschrijvingen() : List<String>
-}
-class RestaurantService
-note left: Per dienst een andere klasse en andere extra inhoud
 
-Bouwsteen ^-- Restaurant
 BouwsteenService -->" - services" ApiService
 ApiService ^-- RestaurantService
 API ^-- APIMetLocatie
@@ -69,5 +82,4 @@ APIMetLocatie ^-- RestaurantAPI
 KaartenService -->"- trueWayDirection" TrueWayDirection
 KaartenService ->"- googleMapsPlaces" GoogleMapsPlaces
 BouwsteenService --> "- bouwsteenRepository" BouwsteenRepository
-BouwsteenController -> "- bouwsteenService" BouwsteenService
 @enduml
