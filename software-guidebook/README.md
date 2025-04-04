@@ -235,7 +235,7 @@ dan zet hij de nieuwe status van de bouwsteen met setStatus(). Deze wordt vervol
 
 In onderstaande toestandsdiagram staat de cyclus van een bouwsteen. Het diagram is een rechte lijn je kan dus 
 alleen een state vooruit maar niet meer terug. Wel kan je bouwstenen annuleren, die krijgen dan de status 
-NietUitvoerbaar en kunnen niet meer gepland wordenen. Er worden excepties gegooid als de actie niet mogelijk 
+NietUitvoerbaar en kunnen niet meer gepland worden. Er worden excepties gegooid als de actie niet mogelijk 
 is bij de huidige status. Er worden alleen pijlen gebruikt als een actie ook daadwerkelijk de toestand van de Bouwsteen 
 verandert, andere acties die je kan uitvoeren maar niet de status veranderen zijn niet weergegeven.
 
