@@ -139,6 +139,13 @@ De backend heeft zijn eigen RequestInterceptor en Auth componenten die samen van
 
 ![Component diagram api authenticatie en authorizatie](./images/component_diagrams/onterwerpvraag/Triptop_Api_Authenticatie_Authorizatie_Component_Diagram.png)
 
+#### Bouwsteen toestanden
+
+Hieronder staat het component diagram voor de ontwerpvraag "Hoe kunnen we ervoor zorgen dat een bouwsteen alleen bepaalde acties toestaat wanneer deze zich in een specifieke toestand bevindt?".
+Alle logica die ervoor zorgt dat alleen bepaalde acties kunnen worden gedaan als de bouwsteen zich in een bepaalde status bevind
+wordt gedaan in het service component. Om de bouwstenen op te halen of de veranderde Bouwstenen op te slaan gebruikt de BouwsteenService de BouwsteenRepository.
+
+![Component diagram api authenticatie en authorizatie](./images/component_diagrams/onterwerpvraag/TripTop_State_component_Diagram.png)
 
 ###     7.3. Design & Code
 In de volgende subhoofdstukken worden de drie design patterns voor de ontwerpvragen besproken.
@@ -187,6 +194,30 @@ Dan authenticeerd het de request door de headers mee te geven aan de authenticat
 Indien de request geauthenticeerd is wordt de request doorverstuurd naar de backend. 
 Anders wordt er een 401 Unauthorized response teruggestuurd.
 ![Sequence diagram api authenticatie en authorizatie](./images/sequence_diagrams/Triptop_Api_Gateway_Request_Interceptor_Sequence_Diagram.png)
+
+#### State voor toestanden bijhouden
+Om acties af te handelen afhankelijk van de toestand waarin een Bouwsteen zich bevindt, is
+gekozen voor het State Pattern. Er is hiervoor gekozen, omdat je zo alle code voor de
+toestanden gescheiden kan houden. Ook is het zo gemakkelijk om nieuwe toestanden toe te voegen
+zonder dat je bestaande code hoeft aan te passen.
+
+In het onderstaande klassendiagram is te zien hoe het State Pattern is toegepast.
+Een Bouwsteen heeft een BouwsteenStatus, waarin standaardmethodes zijn gedefinieerd.
+De klassen Gepland, Geregeld, Betaald, NietUitvoerbaar en Uitgevoerd implementeren de interface
+BouwsteenStatus. Dit zijn de mogelijke toestanden die een Bouwsteen kan hebben.
+Als een toestand specifiek gedrag heeft voor een bepaalde actie, wordt de bijbehorende
+methode in de klasse overschreven.
+
+![klasse diagram state](./images/class_diagrams/Ninthe-TripTop-States-Triptop_Class_Diagram.png)
+
+In het sequentie diagram hieronder staat een voorbeeld van hoe het werkt als je een bouwsteen van status veranderd.
+De gebruiker wilt de bouwsteen betalen, eerst wordt de juiste bouwsteen opgehaald uit de repository.
+Dan roept hij de methode aan op de bouwsteen, die methode controleer eerst de status van de bouwsteen. 
+Is de status null dan wordt er een 400 Bad request terug gegeven. Is de status niet null kan hij de actie 
+uitvoeren die hoort bij de status die hij nu heeft. In dit geval is de toestand "Geregeld" dus kan hij betalen en 
+set hij de nieuwe status in bouwsteen. Deze wordt vervolgens weer opgeslagen door de service in de repository
+
+![seguentie diagram toestand veranderen](./images/sequence_diagrams/Triptop_Wijzigen_van_BouwsteenStatus_sequentieDiagram.png)
 
 ## 8. Architectural Decision Records
 
@@ -599,7 +630,7 @@ In een propotype is het uitgewerkt met BouwsteenStatus. De forces worden beoorde
 |---------------------------------------|---------------|--------------------|
 | Complexiteit                          | -             | +                  |
 | onderhoudbaarheid                     | ++            | -                  |
-| leesbaarheid                          | +             | -                  | 
+| leesbaarheid                          | 0             | 0                  | 
 | volgt Single Responsibility Principle | ++            | --                 |
 | volgt Open/Closed Principle           | ++            | -                  |
 
