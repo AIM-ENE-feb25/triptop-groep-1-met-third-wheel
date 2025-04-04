@@ -1,8 +1,12 @@
-### 9 Strategy design pattern voor authenticatie
+# 9. Strategy design pattern voor authenticatie
 
-Datum: 2025-03-31
+Date: 2025-03-31
 
-#### Context
+## Status
+
+Accepted
+
+## Context
 
 In het prototype is gebruik gemaakt van de Strategy en Factory Method patterns.
 In code ziet het er als volgt uit:
@@ -33,24 +37,21 @@ public interface IAuthStrategy {
 }
 ```
 
-#### Considered Options
+## Options
 
 | Forces                                            | Strategy ja | Strategy nee | Factory ja | Factory nee |
 |---------------------------------------------------|-------------|--------------|------------|-------------|
 | Frontend kan authenticatie methode bepalen        | ++          | --           | ++         | ++          |
 | Backend code volgt single responsiblity principle | ++          | --           | ++         | --          |
 
-#### Decision
+
+## Decision
 
 Dit werkt goed en staat gemakkelijk toe om nieuwe authenticatie strategien toe te voegen. Ook kan de frontend bepalen
 welke strategy gebruikt moet worden. De frontend weet dit omdat het inloggen met de Identity Provider direct vanaf de
 frontend gebeurt.
 
-#### Status
-
-Accepted
-
-#### Consequences
+## Consequences
 
 Het is makkelijk om nieuwe inlog-mogelijkheden toe te voegen.
 Er moet altijd een inlog-strategy gebruikt worden.
