@@ -1,0 +1,26 @@
+@startuml
+title Sequentiediagram: Wijzigen van BouwsteenStatus
+autonumber
+actor Gebruiker
+participant "bouwsteenController: \nBouwsteenController" as BsController
+participant "bouwsteenService: \nBouwsteenService" as BsService
+participant "bouwsteen: \nBouwsteen" as Bs
+participant "Geregeld" as BSSgeregeld
+database "BouwsteenRepository" as DB
+
+Gebruiker -> BsController: betaal(id)
+BsController -> BsService: betaal(id)
+BsService -> DB: bouwsteen = getBouwsteenById(Id)
+BsService -> Bs: betaal()
+Bs -> Bs :controleerBouwsteenStatus()
+alt status == null
+Bs --> Gebruiker: return 400 Bad request
+else
+Bs -> BSSgeregeld: betaal(bouwsteen)
+Bs <-- BSSgeregeld: setState(betaald)
+Bs --> BsService: bouwsteen
+BsService -> DB: saveBouwsteen(bouwsteen)
+BsService --> Gebruiker: status
+end
+
+@enduml

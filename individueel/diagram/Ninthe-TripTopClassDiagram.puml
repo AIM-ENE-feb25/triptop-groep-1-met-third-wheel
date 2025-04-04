@@ -1,0 +1,73 @@
+@startuml
+title Triptop Class Diagram
+class BouwsteenController{
++ plan(int id): String
++ pasAan(int id): String
++ regel(int id): String
++ betaal(int id): String
++ annuleer(int id): String
++ voerUit(int id): String
+}
+
+class BouwsteenService{
+   + plan(int id): String
+   + pasAan(int id): String
+   + regel(int id): String
+   + betaal(int id): String
+   + annuleer(int id): String
+   + voerUit(int id): String
+}
+
+class MockRepository{
+ - bouwstenen: List<Bouwsteen>
+ + getBouwsteenById(id): Bouwsteen
+ + saveBouwsteen(bouwsteen): void
+}
+
+class Bouwsteen {
+    # naam : String
+    # id : int
+    - controleerStatus();
+    + pasAan(): void
+    + regel(): void
+    + betaal(): void
+    + annuleer(): void
+    + voerUit(): void
+}
+
+interface BouwsteenStatus {
+ + pasAan(bouwsteen): void
+ + regel(bouwsteen): void
+ + betaal(bouwsteen): void
+ + voerUit(bouwsteen): void
+ + annuleer(bouwsteen): void
+ + getStatusName(bouwsteen): string
+}
+
+class Gepland{
++ pasAan(bouwsteen)
++ regel(bouwsteen)
+}
+class Geregeld{
++betaal(bouwsteen)
++annuleer(bouwsteen)
+}
+class Betaald{
++voerUit(bouwsteen)
+}
+class NietUitvoerbaar{
++ voerUit(bouwsteen)
+}
+class Uitgevoerd
+
+
+BouwsteenController --> "- bouwsteenService"BouwsteenService
+Bouwsteen --> " # bouwsteenStatus"BouwsteenStatus
+BouwsteenService --> " - bouwsteen" Bouwsteen
+BouwsteenService --> " - mockRepository" MockRepository
+BouwsteenStatus ^-- Gepland
+BouwsteenStatus ^-- Geregeld
+BouwsteenStatus ^-- Betaald
+BouwsteenStatus ^-- NietUitvoerbaar
+BouwsteenStatus ^-- Uitgevoerd
+@enduml
