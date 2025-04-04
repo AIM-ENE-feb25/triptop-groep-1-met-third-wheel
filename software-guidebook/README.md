@@ -233,6 +233,12 @@ dan zet hij de nieuwe status van de bouwsteen met setStatus(). Deze wordt vervol
 
 ![seguentie diagram toestand veranderen](./images/sequence_diagrams/Triptop_Wijzigen_van_BouwsteenStatus_sequentieDiagram.png)
 
+Er worden excepties gegooid als de actie niet mogelijk is bij de huidige status. In onderstaande toestandsdiagram 
+staat de cyclus van een bouwsteen. het diagram is een rechte lijn je kan dus alleen een state vooruit maar niet meer terug.
+wel kan je bouwstenen annuleren die krijgen dan de status nietUitvoerbaar en kunnen niet meer geplanned wordenen.
+
+![toesdtandsdiagram_bouwsteen](./images/toestandsDiagram.png)
+
 ## 8. Architectural Decision Records
 
 In dit hoofdstukken worden verschillende beslissingen uitgelegd met behulp van ADR's.

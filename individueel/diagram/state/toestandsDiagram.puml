@@ -1,0 +1,25 @@
+@startuml
+
+
+state Gepland {
+}
+
+state Geregeld {
+}
+
+state Betaald {
+}
+
+state NietUitvoerbaar {
+}
+
+state Uitgevoerd {
+
+}
+
+[*] ->Gepland: plan()
+Gepland ->Geregeld: regel()
+Geregeld -> Betaald: betaal()
+Geregeld --> NietUitvoerbaar: annuleer()
+Betaald -> Uitgevoerd: voerUit()
+@enduml
