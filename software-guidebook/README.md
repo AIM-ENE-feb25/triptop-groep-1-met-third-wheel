@@ -204,7 +204,7 @@ Indien de request geauthenticeerd is wordt de request doorverstuurd naar de back
 Anders wordt er een 401 Unauthorized response teruggestuurd.
 ![Sequence diagram api authenticatie en authorizatie](./images/sequence_diagrams/Triptop_Api_Gateway_Request_Interceptor_Sequence_Diagram.png)
 
-#### State voor toestanden bijhouden
+#### State pattern voor toestanden bijhouden
 Om acties af te handelen afhankelijk van de toestand waarin een Bouwsteen zich bevindt, is
 gekozen voor het State Pattern. Er is hiervoor gekozen, omdat je zo alle code voor de
 toestanden gescheiden kan houden. Ook is het zo gemakkelijk om nieuwe toestanden toe te voegen
@@ -224,7 +224,7 @@ De gebruiker wilt de bouwsteen betalen, eerst wordt de juiste bouwsteen opgehaal
 Dan roept hij de methode aan op de bouwsteen, die methode controleer eerst de status van de bouwsteen. 
 Is de status null dan wordt er een 400 Bad request terug gegeven. Is de status niet null kan hij de actie 
 uitvoeren die hoort bij de status die hij nu heeft. In dit geval is de toestand "Geregeld" dus kan hij betalen en 
-set hij de nieuwe status in bouwsteen. Deze wordt vervolgens weer opgeslagen door de service in de repository
+dan zet hij de nieuwe status van de bouwsteen met setStatus(). Deze wordt vervolgens weer opgeslagen door de service in de repository
 
 ![seguentie diagram toestand veranderen](./images/sequence_diagrams/Triptop_Wijzigen_van_BouwsteenStatus_sequentieDiagram.png)
 

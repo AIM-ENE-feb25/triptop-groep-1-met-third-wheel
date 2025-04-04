@@ -17,7 +17,7 @@ In een propotype is het uitgewerkt met BouwsteenStatus. De forces worden beoorde
 |---------------------------------------|---------------|--------------------|
 | Complexiteit                          | -             | +                  |
 | onderhoudbaarheid                     | ++            | -                  |
-| leesbaarheid                          | +             | -                  | 
+| leesbaarheid                          | 0             | 0                  | 
 | volgt Single Responsibility Principle | ++            | --                 |
 | volgt Open/Closed Principle           | ++            | -                  |
 
