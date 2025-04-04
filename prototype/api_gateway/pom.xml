@@ -10,7 +10,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.trip.top</groupId>
-    <artifactId>Simon-TripTopPrototype-1</artifactId>
+    <artifactId>TripTop.Api_Gateway.Prototype</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>

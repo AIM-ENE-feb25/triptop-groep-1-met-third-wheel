@@ -1,40 +1,69 @@
 @startuml
 !include <C4/C4_Component>
 
-!define DottedRel(from,to,label) from -[dashed]-> to : label
-!define DottedRel_U(from,to,label) from -[dashed]up-> to : label
-!define DottedRel_D(from,to,label) from -[dashed]down-> to : label
-!define DottedRel_L(from,to,label) from -[dashed]left-> to : label
-!define DottedRel_R(from,to,label) from -[dashed]right-> to : label
+$addRelTagToLegend(D_Rel, "black", "gray", $DASHED_LINE, Not always executed, dashed line)
 
-Container_Ext(id_provider, "Identity Provider", WireMock, "<<Extern Systeem>>\nAuthenticeert gebruikers en geeft token terug")
+!unquoted procedure D_Rel($from, $to, $label, $techn="", $descr="", $sprite="", $tags="D_Rel", $link="", $direction = "")
+!if ($direction == right)
+    $getRel(("-[dashed]right->>"), $from, $to, $label, $techn, $descr, $sprite, $tags, $link)
+!elseif ($direction == left)
+    $getRel(("-[dashed]left->>"), $from, $to, $label, $techn, $descr, $sprite, $tags, $link)
+!elseif ($direction == up)
+    $getRel(("-[dashed]up->>"), $from, $to, $label, $techn, $descr, $sprite, $tags, $link)
+!elseif ($direction == down)
+    $getRel(("-[dashed]down->>"), $from, $to, $label, $techn, $descr, $sprite, $tags, $link)
+!else
+    $getRel("-[dashed]->>", $from, $to, $label, $techn, $descr, $sprite, $tags, $link)
+!endif
+increment()
+!endprocedure
+
+!unquoted procedure D_Rel_R($from, $to, $label, $techn="", $descr="", $sprite="", $tags="", $link="")
+D_Rel($from, $to, $label, $techn, $descr, $sprite, D_Rel, $link, right)
+!endprocedure
+
+!unquoted procedure D_Rel_L($from, $to, $label, $techn="", $descr="", $sprite="", $tags="", $link="")
+D_Rel($from, $to, $label, $techn, $descr, $sprite, D_Rel, $link, left)
+!endprocedure
+
+!unquoted procedure D_Rel_U($from, $to, $label, $techn="", $descr="", $sprite="", $tags="", $link="")
+D_Rel($from, $to, $label, $techn, $descr, $sprite, D_Rel, $link, up)
+!endprocedure
+
+!unquoted procedure D_Rel_D($from, $to, $label, $techn="", $descr="", $sprite="", $tags="", $link="")
+D_Rel($from, $to, $label, $techn, $descr, $sprite, D_Rel, $link, down)
+!endprocedure
+
+title Triptop - Api authenticatie en authorizatie component Diagram
+
+Container_Ext(id_provider, "Identity Provider", WireMock, "<<Extern Systeem>>\nAuthenticeerd gebruikers en geeft token terug")
 
 Container(frontend, "Frontend", "React.JS", "Webapplicatie waar reiziger de reis kan plannen")
 
 Boundary(api_gateway, "Triptop", "ApiGateway Systeem") {
-    Component(api_request_interceptor, RequestInterceptor, Spring Boot Component, Onderschept alle requests naar de ApiGateway en voegt een token toe als de request geauthorizeerd is)
+    Component(api_request_interceptor, RequestInterceptor, Spring Boot Component, Onderschept alle requests naar de ApiGateway en voegt een token toe als de request geauthentizeerd is)
     Component(api_auth, Auth, Spring Boot Component, Authenticeerd en authorizeerd gebruikers)
     ComponentDb(api_cache, Cache, Redis, Cached de tokens van de Identity Provider)
 
-    Rel_R(api_request_interceptor, api_auth, Authorizeerd requests met)
+    Rel_R(api_request_interceptor, api_auth, Authentizeerd requests met)
     Rel_R(api_auth, api_cache, Leest/Schrijft)
 }
 
-DottedRel(api_auth, id_provider, "Controleert of gebruiker geauthenticeerd is")
+D_Rel(api_auth, id_provider, "Controleert of gebruiker geauthenticeerd is", HTTP/JSON)
 Lay_R(api_cache, id_provider)
 
 Rel_D(frontend, api_request_interceptor, Verstuurt API request naar, HTTP/JSON)
 
 Boundary(backend, "Triptop", "Backend Systeem") {
-    Component(backend_request_interceptor, RequestInterceptor, Spring Boot Component, Onderschept alle requests naar de backend en staat deze alleen toe als die geauthorizeerd is)
-    Component(backend_controller, BouwsteenController, Spring MVC Controller, Handles API requests)
+    Component(backend_request_interceptor, RequestInterceptor, Spring Boot Component, Onderschept alle requests naar de backend en staat deze alleen toe als die geauthentizeerd is)
+    Component(backend_controller, BouwsteenController, Spring MVC Controller, Verwerkt API requests)
     Component(backend_auth, Auth, Spring Boot Component, Controleert of de request de token gemaakt in de ApiGateway heeft.)
 
-    Rel_R(backend_request_interceptor, backend_auth, Authorizeerd requests met)
-    DottedRel_D(backend_request_interceptor, backend_controller, Verstuurt geauthorizeerde verzoeken door)
+    Rel_R(backend_request_interceptor, backend_auth, Authentizeerd requests met)
+    D_Rel_D(backend_request_interceptor, backend_controller, Verstuurt geauthentizeerde verzoeken door)
 }
 
-DottedRel_D(api_request_interceptor, backend_request_interceptor, Verstuurt geauthorizeerde verzoeken door)
+D_Rel_D(api_request_interceptor, backend_request_interceptor, Verstuurt geauthentizeerde verzoeken door, HTTP/JSON)
 
 
 SHOW_LEGEND()

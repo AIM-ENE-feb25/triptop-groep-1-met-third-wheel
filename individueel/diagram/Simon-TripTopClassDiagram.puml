@@ -5,14 +5,25 @@ skinparam classAttributeIconSize 0
 
 title TripTop ApiGateway RequestInterceptor class diagram
 
-interface Filter <<interface>> {
-    - doFilter()
+interface GlobalFilter <<interface>> {
+    + filter(ServerWebExchange exchange, GatewayFilterChain chain)
 }
-note "Komt van Spring Boot" as filterNote
+note "Komt van Spring Cloud Gateway" as filterNote
 
-filterNote .. Filter
+filterNote .. GlobalFilter
+
+interface PriorityOrdered <<interface>> {
+    + getOrder()
+}
+
+filterNote .. PriorityOrdered
 
 class InboundRequestFilter {
+}
+
+interface IAuthStrategy <<interface>> {
+    - boolean authenticate(Map<String, String> headers)
+    - String getStrategyName()
 }
 
 class RestTemplate{
@@ -22,21 +33,31 @@ note "Komt van Spring Boot" as restTemplateNote
 restTemplateNote .. RestTemplate
 
 class AuthStrategyFactory {
-    + AuthStrategy getStrategy(String strategyType)
+    + IAuthStrategy getStrategy(String strategyType)
 }
 
-abstract class AuthStrategy <<abstract class>> {
-    - boolean isAuthenticated(String: token)
+abstract class ApiAuthStrategy <<abstract class>> {
 }
 
-InboundRequestFilter -up-^ Filter
-InboundRequestFilter -right-> "- authStrategyFactory" AuthStrategyFactory
+class MockAuthStrategy {}
+class MockLocalAuthStrategy {}
 
-AuthStrategyFactory ..> AuthStrategy : <<creates>>
-InboundRequestFilter ..> AuthStrategy : <<uses>>
+note "Een voorbeeld auth strategy die gemaakt kan worden" as mockAuthStrategyNote
+mockAuthStrategyNote ..left MockAuthStrategy
+mockAuthStrategyNote ..left MockLocalAuthStrategy
 
+InboundRequestFilter -up-^ GlobalFilter
+InboundRequestFilter -up-^ PriorityOrdered
+InboundRequestFilter --> "- authStrategyFactory" AuthStrategyFactory
 
-AuthStrategy -up-> "- restTempalte" RestTemplate
+AuthStrategyFactory ..> IAuthStrategy : <<creates>>
+InboundRequestFilter ..> IAuthStrategy : <<uses>>
+
+ApiAuthStrategy --> "- restTempalte" RestTemplate
+ApiAuthStrategy -up-^ IAuthStrategy
+
+MockAuthStrategy -up-^ ApiAuthStrategy
+MockLocalAuthStrategy -up-^IAuthStrategy
 
 
 @enduml

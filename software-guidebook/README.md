@@ -75,6 +75,16 @@ Voordat deze casusomschrijving tot stand kwam, heeft de opdrachtgever de volgend
 > [!IMPORTANT]
 > Beschrijf zelf de belangrijkste architecturele en design principes die zijn toegepast in de software.
 
+> Open/Closed Principle
+
+Dit principe is toegepast zodat er gemakkelijk nieuwe APIs of authenticatie vormen toegevoegd kunnen worden.
+Het is belangrijk om dit principe te volgen omdat dan al bestaande code niet veranderd hoeft te worden om de toevoegingen te kunnen doen.
+
+> Program to an Interface
+
+Dit principe is toegepast zodat code niet afhankelijk is van concrete implementaties maar van abstracties.
+Het is belangrijk om dit toe te passen zodat er nieuwe implementaties toegevoegd of vervangen kunnen worden.
+
 ## 7. Software Architecture
 
 ###     7.1. Containers
@@ -87,165 +97,192 @@ Voordat deze casusomschrijving tot stand kwam, heeft de opdrachtgever de volgend
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
 
+#### Api authenticatie en authorizatie
+
+Het component diagram over hoe er voor gezorgd wordt dat authenticatie en authorisatie consistent worden toegepast bij het communiceren met verschillende externe APIs staat hieronder.
+Dit is geinterpreteerd als dat gebruikers geauthenticeerd en geauthorizeerd moeten zijn voor de specifieke requests die ze willen maken.
+
+Hiervoor wordt gebruik gemaakt van een aparte ApiGateway die daarin alle requests authenticeerd en authorizeerd.
+Het Auth component zal verantwoordelijk zijn voor het bekijken wat voor type request er gedaan wordt en of de gebruiker die mag maken.
+
+Als het Auth component de request toestaat zal de RequestInterceptor een extra token toevoegen die gebruikt zal worden door de backend om te valideren dat de request via de Api Gateway gemaakt is.
+Daarna stuurd de RequestInterceptor de request door naar de backend.
+
+De backend heeft zijn eigen RequestInterceptor en Auth componenten die samen van alle requests valideren dat ze gemaakt zijn via de Api Gateway.
+
+![Component diagram api authenticatie en authorizatie](./images/component_diagrams/onterwerpvraag/Triptop_Api_Authenticatie_Authorizatie_Component_Diagram.png)
+
 ###     7.3. Design & Code
 
 > [!IMPORTANT]
 > Voeg toe: Per ontwerpvraag een Class Diagram plus een Sequence Diagram van een aantal scenario's inclusief begeleidende tekst.
+
+
+#### Strategy en factory voor api auth
+
+Voor het authenticeren en authorizeren van alle requests naar de API is ervoor gekozen om de Strategy en Factory patterns in combinatie te gebruiken.
+Hiervoor is gekozen omdat er op deze manier gemakkelijk een nieuwe authenticatie service toegevoegd kan worden.
+Ook kan de frontend dan doorgeven welke authenticatie service gebruikt moet worden.
+
+In het volgende klassendiagram is te zien hoe de twee patterns gebruikt worden.
+De InboundRequestFilter gebruikt de AuthStrategyFactory om een IAuthStrategy te maken.
+IAuthStrategy is een interface met een methode `authenticate` die geimplementeerd wordt door specifieke AuthStrategies zoals bijvoord MockLocalAuthStrategy.
+
+![KLasse diagram api authenticatie en authorizatie](./images/class_diagrams/Triptop_Api_Gateway_Request_Interceptor_Class_Diagram.png)
+
+In het sequentie diagram hieronder is te zien hoe de API Gateway te werk gaat.
+De API Gateway krijgt een willekeurige HTTP Request en haalt als eerste alle headers uit de request.
+Dan authenticeerd het de request door de headers mee te geven aan de authenticate methode.
+Indien de request geauthenticeerd is wordt de request doorverstuurd naar de backend.
+Anders wordt er een 401 Unauthorized response teruggestuurd.
+![Sequence diagram api authenticatie en authorizatie](./images/sequence_diagrams/Triptop_Api_Gateway_Request_Interceptor_Sequence_Diagram.png)
 
 ## 8. Architectural Decision Records
 
 > [!IMPORTANT]
 > Voeg toe: 3 tot 5 ADR's die beslissingen beschrijven die zijn genomen tijdens het ontwerpen en bouwen van de software.
 
-### 8.1. ADR-001 TITLE
+### 8.4. ADR-004 Gateway Security
 
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
-
-#### Context 
-
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
-
-#### Considered Options
-
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
-
-#### Decision
-
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
-
-#### Status 
-
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
-
-#### Consequences 
-
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
-
-### 8.2. ADR-002 TITLE
-
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
+Datum: 2025-03-27
 
 #### Context
 
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
+De applicatie moet beveiligd worden. Op alle requests moeten tokens aanwezig zijn en geverifieerd worden. Er hoeft enkel
+gekeken te worden of de gebruiker geauthorizeerd is, verder moeten geen acties ondernomen worden.
 
 #### Considered Options
 
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
+| Forces                                 | Spring Security | Spring Boot Filters | ClientHttpRequestInterceptor |
+|----------------------------------------|-----------------|---------------------|------------------------------|
+| Moet incoming requests kunnen filteren | ++              | ++                  | --                           |
+| Moet eenvoudig zijn                    | -               | ++                  | +                            |
+| Staat custom filters toe               | ++              | ++                  | ++                           |    
 
 #### Decision
 
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
+We kiezen voor Spring Boot Filters omdat dit een envoudige manier is om een filter uit te voeren op alle requests. Omdat
+het voor ons enorm belangrijk is dat het eenvoudig is en we geen extra acties moeten ondernemen, daarom is de extra
+complexiteit van Spring Security ongewenst.
 
 #### Status
 
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
+Accepted
+
+Superceded by [8. Use Spring Cloud Gateway for gateway](../doc/architecture/decisions/0008-use-spring-cloud-gateway-for-gateway.md)
+
 
 #### Consequences
 
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
+- We kunnen eenvoudig nieuwe filters toevoegen.
+- We moeten Spring Boot gebruiken.
 
-### 8.3. ADR-003 TITLE
+### 8.7. ADR-007 Gebruik van Spring Cloud Gateway voor gateway
 
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
+Datum: 2025-03-31
 
 #### Context
 
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
+Om te zorgen dat alle requests via de gateway doorgaan naar de backend server wanneer ze door alle filters gaan moet er
+een technology gebruikt worden voor het doorsturen van requests.
 
 #### Considered Options
 
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
+| Forces        | Maak de doorstuur technology zelf | Spring Cloud Gateway |
+|---------------|-----------------------------------|----------------------|
+| Complexiteit  | ?                                 | ++                   |
+| Onderhoud     | --                                | ++                   |
+| Performance   | ?                                 | +                    |
+| Flexibiliteit | ?                                 | ++                   |
 
 #### Decision
 
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
+We kiezen om Spring Cloud Gateway te gebruiken, omdat het biedt wat nodig is en in het Spring
+ecosysteem zit, waar de rest van de TripTop applicatie ook mee gemaakt wordt.
 
 #### Status
 
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
+Accepted
+
+Supercedes [5. gateway security](../doc/architecture/decisions/0005-gateway-security.md)
 
 #### Consequences
 
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
+Consequentie hiervoor is dat er geen gebruik gemaakt kan worden van de Filter interface van Spring Boot Web, maar er moet
+gebruik gemaakt worden van de GlobalFilter en Ordered interfaces van Spring Cloud Gateway.
+Het is makkelijk om te wisselen naar een nieuwe server, omdat er maar op een plek het URL domein gebruikt wordt.
+Het is makkelijk om te wisselen naar een microservice structuur met meerdere kleine servers.
 
-### 8.4. ADR-004 TITLE
+### 8.8. ADR-008 Strategy design pattern voor authenticatie
 
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
+Datum: 2025-03-31
 
 #### Context
 
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
+In het prototype is gebruik gemaakt van de Strategy en Factory Method patterns.
+In code ziet het er als volgt uit:
+
+```java
+AuthStrategy authStrategy = authStrategyFactory.getStrategy(parameterMap.get("auth-type"));
+boolean isAuthenticated = false;
+isAuthenticated = authStrategy.authenticate(parameterMap);
+```
+
+```java
+
+@Component
+public class AuthStrategyFactory {
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    public AuthStrategy getStrategy(String authType) {
+        return switch (authType) {
+            case "mock" -> new MockAuthStrategy(restTemplate);
+            case "google" -> new GoogleMockAuthStrategy(restTemplate);
+            default -> throw new IllegalArgumentException("Unknown auth type: " + authType);
+        };
+    }
+}
+```
+
+```java
+public abstract class AuthStrategy {
+    protected final RestTemplate restTemplate;
+    protected final String authApiLink;
+    protected final String strategyName;
+
+    protected AuthStrategy(RestTemplate restTemplate, String authApiLink, String strategyName) {
+        this.restTemplate = restTemplate;
+        this.authApiLink = authApiLink;
+        this.strategyName = strategyName;
+    }
+
+    public abstract boolean authenticate(Map<String, String> requestParams);
+}
+```
 
 #### Considered Options
 
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
+| Forces                                            | Strategy ja | Strategy nee | Factory ja | Factory nee |
+|---------------------------------------------------|-------------|--------------|------------|-------------|
+| Frontend kan authenticatie methode bepalen        | ++          | --           | ++         | ++          |
+| Backend code volgt single responsiblity principle | ++          | --           | ++         | --          |
 
 #### Decision
 
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
+Dit werkt goed en staat gemakkelijk toe om nieuwe authenticatie strategien toe te voegen. Ook kan de frontend bepalen
+welke strategy gebruikt moet worden. De frontend weet dit omdat het inloggen met de Identity Provider direct vanaf de
+frontend gebeurt.
 
 #### Status
 
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
+Accepted
 
 #### Consequences
 
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
+Het is makkelijk om nieuwe inlog-mogelijkheden toe te voegen.
+Er moet altijd een inlog-strategy gebruikt worden.
+Er moet samengewerkt worden vanuit de frontend en backend voor de namen van de headers.
 
-### 8.5. ADR-005 TITLE
-
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
-
-#### Context
-
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
-
-#### Considered Options
-
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
-
-#### Decision
-
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
-
-#### Status
-
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
-
-#### Consequences
-
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
 
 ## 9. Deployment, Operation and Support
 
