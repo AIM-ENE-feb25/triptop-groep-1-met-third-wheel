@@ -1,0 +1,85 @@
+@startuml
+title Triptop Class Diagram
+
+abstract class Bouwsteen {
+    - naam : String
+    - type : String
+    - link : String
+    - info : String
+    - locatie : Locatie
+}
+
+class Restaurant
+note left: Per dienst een andere klasse en andere extra inhoud
+
+Bouwsteen ^-- Restaurant
+
+
+class BouwsteenController {
+    +getAlleRestaurants(locatie : String)
+    +getRouteBouwsteen(id: int)
+}
+
+class BouwsteenService{
+  +getAlleRestaurantsOpLocatie(location : String) : List<Bouwsteen>
+  +getRouteNaarBouwsteen(id : int)
+}
+BouwsteenController --> "- bouwsteenService" BouwsteenService
+
+
+class BouwsteenRepository {
+}
+
+
+
+interface ApiService{
+    getBouwstenen(locatie : String) : List<Bouwsteen>
+}
+
+class RestaurantService
+note left: Per dienst een andere klasse en andere extra inhoud
+
+
+
+class KaartenService{
+    +getNaam(location : Location) : String
+    +getCoordinaten(location : String) : Locatie
+}
+
+class GoogleMapsPlaces
+class TrueWayDirection{
++ getRouteBeschrijvingen() : List<String>
+}
+
+abstract class API <T, V> {
+    restTemplate : RestTemplate
+    voerAPICallUit(<V>) : <T>
+}
+
+abstract class APIMetLocatie < T , V>
+
+
+
+abstract class RestaurantAPI <RestaurantBouwsteen,String> {
+}
+
+note left: Per dienst een andere klasse
+
+class UberEats
+class Thuisbezorgd
+
+BouwsteenService -->" - services" ApiService
+ApiService ^-- RestaurantService
+API ^-- APIMetLocatie
+APIMetLocatie ---> "- kaartenservice" KaartenService
+RestaurantAPI ^-- UberEats
+RestaurantAPI ^-- Thuisbezorgd
+ApiService ^-- KaartenService
+RestaurantService --> "-apis" RestaurantAPI
+API ^-- TrueWayDirection
+API ^-- GoogleMapsPlaces
+APIMetLocatie ^-- RestaurantAPI
+KaartenService -->"- trueWayDirection" TrueWayDirection
+KaartenService ->"- googleMapsPlaces" GoogleMapsPlaces
+BouwsteenService --> "- bouwsteenRepository" BouwsteenRepository
+@enduml

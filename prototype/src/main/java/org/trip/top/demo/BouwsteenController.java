@@ -18,8 +18,12 @@ public class BouwsteenController {
         this.bouwsteenService = bouwsteenService;
     }
 
-    @GetMapping
-    public List<Bouwsteen> getAlleRestaurants(String locatie) {
+    @GetMapping("/restaurant")
+    public List<Bouwsteen> getAlleRestaurants(@RequestParam String locatie) {
         return bouwsteenService.getAlleRestaurantsOpLocatie(locatie);
+    }
+    @GetMapping("/route")
+    public List<Bouwsteen> getRouteBouwsteen(@RequestParam int id) {
+        return bouwsteenService.getRouteNaarBouwsteen(id);
     }
 }

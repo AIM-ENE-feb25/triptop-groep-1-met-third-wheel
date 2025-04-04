@@ -1,0 +1,22 @@
+@startuml
+title TripTop Restaurant API Sequence
+autonumber
+actor Gebruiker
+participant "BouwsteenController : bouwsteenController" as controller
+participant "BouwsteenService : bouwsteenService" as service
+participant "RestaurantService : restaurantService" as restaurantService
+participant "RestaurantAPI : restaurantAPI" as restaurantAPI
+Gebruiker -> controller : getAlleRestaurants(locatie)
+controller -> service : getAlleRestaurantsOpLocatie(locatie)
+    alt service instanceOf RestaurantService
+                service -> restaurantService : getBouwstenen(locatie)
+        loop api in apis
+             restaurantService -> restaurantAPI : List<Bouwsteen> bouwstenen = overAPICallUit(locatie)
+        end
+
+restaurantService --> service: List<Bouwsteen> bouwstenen
+service --> controller : List<Bouwsteen>  bouwstenen
+controller --> Gebruiker : List<Bouwsteen> bouwstenen
+            end
+
+@enduml

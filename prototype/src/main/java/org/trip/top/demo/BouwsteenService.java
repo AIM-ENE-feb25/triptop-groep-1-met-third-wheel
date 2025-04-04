@@ -30,4 +30,18 @@ public class BouwsteenService {
 
         return bouwstenen;
     }
+
+    public List<Bouwsteen> getRouteNaarBouwsteen(int id) {
+        var bouwsteen = mockBouwsteenRepository.getBouwsteenById(id);
+        List<Bouwsteen> bouwstenen = new ArrayList<>();
+
+        for (ApiService service : apiServices){
+            if (service instanceof KaartenService) {
+                var adress = ((KaartenService) service).getAdress(bouwsteen.getLocatie());
+                bouwstenen.addAll(service.getBouwstenen(adress));
+            }
+        }
+
+        return bouwstenen;
+    }
 }
