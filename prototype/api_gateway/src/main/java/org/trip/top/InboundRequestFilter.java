@@ -6,11 +6,9 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
-import org.trip.top.auth.AuthStrategy;
 import org.trip.top.auth.AuthStrategyFactory;
 import reactor.core.publisher.Mono;
 
@@ -29,7 +27,7 @@ public class InboundRequestFilter implements GlobalFilter, PriorityOrdered {
     var parameterMap = request.getHeaders().toSingleValueMap();
     System.out.println(parameterMap);
     try {
-      AuthStrategy authStrategy = authStrategyFactory.getStrategy(parameterMap.get("auth-type"));
+      var authStrategy = authStrategyFactory.getStrategy(parameterMap.get("auth-type"));
       boolean isAuthenticated = false;
       isAuthenticated = authStrategy.authenticate(parameterMap);
 

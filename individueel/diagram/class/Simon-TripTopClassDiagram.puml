@@ -21,6 +21,11 @@ filterNote .. PriorityOrdered
 class InboundRequestFilter {
 }
 
+interface IAuthStrategy <<interface>> {
+    - boolean authenticate(Map<String, String> headers)
+    - String getStrategyName()
+}
+
 class RestTemplate{
 }
 
@@ -28,27 +33,31 @@ note "Komt van Spring Boot" as restTemplateNote
 restTemplateNote .. RestTemplate
 
 class AuthStrategyFactory {
-    + AuthStrategy getStrategy(String strategyType)
+    + IAuthStrategy getStrategy(String strategyType)
 }
 
-abstract class AuthStrategy <<abstract class>> {
-    - boolean authenticate(Map<String, String>: headers)
+abstract class ApiAuthStrategy <<abstract class>> {
 }
 
-class GoogleAuthStrategy {}
-note "Een voorbeeld auth strategy die gemaakt kan worden" as googleAuthStrategyNote
-googleAuthStrategyNote ..left GoogleAuthStrategy
+class MockAuthStrategy {}
+class MockLocalAuthStrategy {}
+
+note "Een voorbeeld auth strategy die gemaakt kan worden" as mockAuthStrategyNote
+mockAuthStrategyNote ..left MockAuthStrategy
+mockAuthStrategyNote ..left MockLocalAuthStrategy
 
 InboundRequestFilter -up-^ GlobalFilter
 InboundRequestFilter -up-^ PriorityOrdered
 InboundRequestFilter --> "- authStrategyFactory" AuthStrategyFactory
 
-AuthStrategyFactory ..> AuthStrategy : <<creates>>
-InboundRequestFilter ..> AuthStrategy : <<uses>>
+AuthStrategyFactory ..> IAuthStrategy : <<creates>>
+InboundRequestFilter ..> IAuthStrategy : <<uses>>
 
-AuthStrategy --up> "- restTempalte" RestTemplate
+ApiAuthStrategy --> "- restTempalte" RestTemplate
+ApiAuthStrategy -up-^ IAuthStrategy
 
-GoogleAuthStrategy -up-^ AuthStrategy
+MockAuthStrategy -up-^ ApiAuthStrategy
+MockLocalAuthStrategy -up-^IAuthStrategy
 
 
 @enduml

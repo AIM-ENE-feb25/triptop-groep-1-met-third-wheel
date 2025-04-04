@@ -6,16 +6,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import org.trip.top.auth.AuthStrategy;
+import org.trip.top.auth.ApiAuthStrategy;
 
-public class GoogleMockAuthStrategy extends AuthStrategy {
-  public GoogleMockAuthStrategy(RestTemplate restTemplate) {
-    super(restTemplate, "http://localhost:8001/auth?token=", "googleMock");
+public class GoogleMockAuthStrategy extends ApiAuthStrategy {
+  public GoogleMockAuthStrategy() {
+    super("http://localhost:8001/auth?token=");
   }
 
   @Override
   public boolean authenticate(Map<String, String> headers) {
-    System.out.println("Strategy: " + strategyName);
+    System.out.println("Strategy: " + strategyName());
 
     RequestBody requestBody = new RequestBody(headers.get("username"));
 
@@ -28,6 +28,11 @@ public class GoogleMockAuthStrategy extends AuthStrategy {
         restTemplate.postForEntity(authApiLink + headers.get("token"), request, Void.class);
 
     return response.getStatusCode().is2xxSuccessful();
+  }
+
+  @Override
+  public String strategyName() {
+    return "GoogleMockAuthStrategy";
   }
 
   private record RequestBody(String username, String application) {
