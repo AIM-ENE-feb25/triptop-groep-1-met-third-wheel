@@ -1,32 +1,25 @@
-# 9. Strategy design pattern voor authenticatie
+### 9 Strategy design pattern voor authenticatie
 
-Date: 2025-03-31
+Datum: 2025-03-31
 
-## Status
-
-Accepted
-
-## Context
+#### Context
 
 In het prototype is gebruik gemaakt van de Strategy en Factory Method patterns.
 In code ziet het er als volgt uit:
 
 ```java
-AuthStrategy authStrategy = authStrategyFactory.getStrategy(parameterMap.get("auth-type"));
+IAuthStrategy authStrategy = authStrategyFactory.getStrategy(parameterMap.get("auth-type"));
 boolean isAuthenticated = false;
 isAuthenticated = authStrategy.authenticate(parameterMap);
 ```
 
 ```java
-
 @Component
 public class AuthStrategyFactory {
-    private final RestTemplate restTemplate = new RestTemplate();
-
-    public AuthStrategy getStrategy(String authType) {
+    public IAuthStrategy getStrategy(String authType) {
         return switch (authType) {
-            case "mock" -> new MockAuthStrategy(restTemplate);
-            case "google" -> new GoogleMockAuthStrategy(restTemplate);
+            case "mock" -> new MockAuthStrategy();
+            case "local" -> new MockLocalAuthStrategy();
             default -> throw new IllegalArgumentException("Unknown auth type: " + authType);
         };
     }
@@ -34,36 +27,30 @@ public class AuthStrategyFactory {
 ```
 
 ```java
-public abstract class AuthStrategy {
-    protected final RestTemplate restTemplate;
-    protected final String authApiLink;
-    protected final String strategyName;
-
-    protected AuthStrategy(RestTemplate restTemplate, String authApiLink, String strategyName) {
-        this.restTemplate = restTemplate;
-        this.authApiLink = authApiLink;
-        this.strategyName = strategyName;
-    }
-
-    public abstract boolean authenticate(Map<String, String> requestParams);
+public interface IAuthStrategy {
+    boolean authenticate(Map<String, String> requestParams);
+    String strategyName();
 }
 ```
 
-## Options
+#### Considered Options
 
 | Forces                                            | Strategy ja | Strategy nee | Factory ja | Factory nee |
 |---------------------------------------------------|-------------|--------------|------------|-------------|
 | Frontend kan authenticatie methode bepalen        | ++          | --           | ++         | ++          |
 | Backend code volgt single responsiblity principle | ++          | --           | ++         | --          |
 
-
-## Decision
+#### Decision
 
 Dit werkt goed en staat gemakkelijk toe om nieuwe authenticatie strategien toe te voegen. Ook kan de frontend bepalen
 welke strategy gebruikt moet worden. De frontend weet dit omdat het inloggen met de Identity Provider direct vanaf de
 frontend gebeurt.
 
-## Consequences
+#### Status
+
+Accepted
+
+#### Consequences
 
 Het is makkelijk om nieuwe inlog-mogelijkheden toe te voegen.
 Er moet altijd een inlog-strategy gebruikt worden.
